@@ -27,6 +27,14 @@
   margin-bottom: 20px;
 }
 
+.content h2 {
+  font-size: 2rem;
+}
+
+.content h3 {
+  font-size: 1.75rem;
+}
+
 @media small {
   .title {
     font-size: 2.2rem;
