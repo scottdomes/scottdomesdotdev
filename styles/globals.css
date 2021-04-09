@@ -45,6 +45,10 @@ a:hover {
   color: #c33764;
 }
 
+a:hover > * {
+  color: #c33764;
+}
+
 blockquote {
   border-left: 5px solid #7a1e6d;
   margin-left: 0;

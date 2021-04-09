@@ -2,9 +2,9 @@ import React from "react";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import styles from "./CodeBlock.module.css";
 import theme from "prism-react-renderer/themes/duotoneDark";
-import custom from './theme2'
+import custom from "./theme2";
 
-export default ({ children, className }) => {
+export default function CodeBlock({ children, className }) {
   const language = className.replace(/language-/, "");
 
   return (
@@ -27,4 +27,4 @@ export default ({ children, className }) => {
       )}
     </Highlight>
   );
-};
+}
