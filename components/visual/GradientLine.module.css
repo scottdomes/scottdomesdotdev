@@ -1,4 +1,5 @@
 @value triLight, triMid, triDark from "styles/colors.css";
+@value small from 'styles/breakpoints.css';
 
 .main {
   background-color: triDark;
@@ -23,5 +24,12 @@
   }
   100% {
     background-position: 100% 0%;
+  }
+}
+
+@media small {
+  .main {
+    margin-top: 20px;
+    height: 10px;
   }
 }

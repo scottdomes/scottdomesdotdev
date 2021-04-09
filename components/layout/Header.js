@@ -10,7 +10,7 @@ const Header = () => {
         <Logo />
         <div className={styles.linkContainer}>
           <Link href="/courses">Courses</Link>
-          <Link href="/profile">Profile</Link>
+          <Link href="/articles">Articles</Link>
         </div>
       </Container>
     </div>

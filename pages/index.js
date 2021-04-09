@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <Layout>
       <h1 className={styles.title}>
-        <span className="tri-light">Courses, articles, and books</span> to help
+        <span className="tri-dark">Courses, articles, and books</span> to help
         you become{" "}
-        <span className="tri-dark">an insanely productive developer.</span>
+        <span className="tri-light">an insanely productive developer.</span>
       </h1>
       <GradientLine />
 
