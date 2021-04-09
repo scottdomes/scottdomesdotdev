@@ -1,7 +1,7 @@
 import styles from "./GradientLine.module.css";
 
-const GradientLine = () => {
-  return <div className={styles.main} />;
+const GradientLine = ({ className }) => {
+  return <div className={`${className} ${styles.main}`} />;
 };
 
 export default GradientLine;

@@ -1,0 +1,35 @@
+@value small from 'styles/breakpoints.css';
+
+.title {
+  font-size: 3rem;
+}
+
+.description {
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.line {
+  margin-top: 20px;
+  height: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.content p {
+  margin-bottom: 32px;
+  font-weight: 420;
+  line-height: 32px;
+  font-size: 20px;
+}
+
+.content h2, .content h3, .content h4, .content h5 {
+  margin-bottom: 20px;
+}
+
+@media small {
+  .title {
+    font-size: 2.2rem;
+    margin-top: 10px;
+  }
+}
