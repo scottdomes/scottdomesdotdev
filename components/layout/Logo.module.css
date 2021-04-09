@@ -8,9 +8,9 @@
   background-color: triDark;
   background-image: linear-gradient(
     43deg,
-    triDark 0%,
+    triLight 0%,
     triMid 46%,
-    triLight 100%
+    triDark 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
