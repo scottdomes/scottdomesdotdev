@@ -9,7 +9,7 @@ export default function Home() {
       <h1 className={styles.title}>
         <span className="tri-dark">Courses, articles, and books</span> to help
         you become{" "}
-        <span className="tri-light">an insanely productive developer.</span>
+        <span className="tri-">an insanely productive developer.</span>
       </h1>
       <GradientLine />
 
