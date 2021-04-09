@@ -1,7 +1,8 @@
 import React from "react";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import styles from "./CodeBlock.module.css";
-import theme from "prism-react-renderer/themes/oceanicNext";
+import theme from "prism-react-renderer/themes/duotoneDark";
+import custom from './code-theme'
 
 export default ({ children, className }) => {
   const language = className.replace(/language-/, "");
@@ -9,7 +10,7 @@ export default ({ children, className }) => {
   return (
     <Highlight
       {...defaultProps}
-      theme={theme}
+      theme={custom}
       code={children}
       language={language}
     >

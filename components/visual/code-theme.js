@@ -1,7 +1,7 @@
 const theme = {
   plain: {
     backgroundColor: "#2a2734",
-    color: "#9a86fd",
+    color: "#FCFCFC",
   },
   styles: [
     {
@@ -19,13 +19,13 @@ const theme = {
     {
       types: ["tag", "operator", "number"],
       style: {
-        color: "#e09142",
+        color: "#F85E84",
       },
     },
     {
       types: ["property", "function"],
       style: {
-        color: "#C33764",
+        color: "#A9DC76",
       },
     },
     {
@@ -37,7 +37,8 @@ const theme = {
     {
       types: ["attr-name"],
       style: {
-        color: "#c4b9fe",
+        color: "#77DAE6",
+        fontStyle: "italic",
       },
     },
     {
@@ -58,7 +59,32 @@ const theme = {
         "variable",
       ],
       style: {
-        color: "#ffcc99",
+        color: "#72CDD8",
+      },
+    },
+    {
+      types: ["boolean", "keyword"],
+      style: {
+        color: "#A89AED",
+      },
+    },
+    {
+      types: ["script"],
+      style: {
+        color: "white",
+      },
+    },
+    {
+      types: ["attr-value"],
+      style: {
+        color: "#F6D063",
+      },
+    },
+    {
+      types: ["parameter"],
+      style: {
+        color: "#F29364",
+        fontStyle: "italic",
       },
     },
     {
