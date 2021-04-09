@@ -21,9 +21,21 @@ a {
 }
 
 .tri-light {
-  color: #C33764;
+  color: #c33764;
 }
 
 .tri-mid {
-  color: #7A1E6D;
+  color: #7a1e6d;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label {
+  color: #34495e;
+  margin: 0;
 }
