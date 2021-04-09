@@ -1,0 +1,6 @@
+@value small: (max-width: 599px);
+@value mediumAndBelow: (max-width: 1000px);
+@value medium: (min-width: 600px) and (max-width: 1000px);
+@value large: (min-width: 960px);
+
+@value maxWidth: 959px;
