@@ -1,0 +1,12 @@
+@value maxWidth, mediumAndBelow from "styles/breakpoints.css";
+
+.container {
+  max-width: maxWidth;
+  margin: 0 auto;
+}
+
+@media mediumAndBelow {
+  .container {
+    padding: 0 20px;
+  }
+}
