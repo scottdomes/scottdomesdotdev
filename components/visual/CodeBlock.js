@@ -1,12 +1,18 @@
 import React from "react";
 import Highlight, { defaultProps } from "prism-react-renderer";
-import styles from './CodeBlock.module.css'
+import styles from "./CodeBlock.module.css";
+import theme from "prism-react-renderer/themes/palenight";
 
 export default ({ children, className }) => {
   const language = className.replace(/language-/, "");
 
   return (
-    <Highlight {...defaultProps} code={children} language={language}>
+    <Highlight
+      {...defaultProps}
+      theme={theme}
+      code={children}
+      language={language}
+    >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className={`${className} ${styles.pre}`} style={{ ...style }}>
           {tokens.map((line, i) => (
