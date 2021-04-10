@@ -5,7 +5,9 @@ import theme from "prism-react-renderer/themes/duotoneDark";
 import custom from "./theme2";
 
 export default function CodeBlock({ children, className }) {
-  const language = className.replace(/language-/, "");
+  const language = className
+    ? className.replace(/language-/, "")
+    : "language-bash";
 
   return (
     <Highlight
