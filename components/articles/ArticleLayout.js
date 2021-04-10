@@ -17,6 +17,13 @@ const ArticleLayout = ({ meta, children }) => {
       <MDXProvider components={components}>
         <article className={styles.content}>{children}</article>
       </MDXProvider>
+      <iframe
+        src="https://scottdomesdev.substack.com/embed"
+        height="320"
+        className={styles.iframe}
+        frameborder="0"
+        scrolling="no"
+      ></iframe>
     </Layout>
   );
 };

@@ -12,7 +12,13 @@
 .line {
   margin-top: 20px;
   height: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.iframe {
+  border: 1px solid #eee;
+  background: white;
   width: 100%;
 }
 
@@ -27,7 +33,10 @@
   max-width: 100%;
 }
 
-.content h2, .content h3, .content h4, .content h5 {
+.content h2,
+.content h3,
+.content h4,
+.content h5 {
   margin-bottom: 20px;
 }
 
