@@ -3,6 +3,7 @@ import GradientLine from "components/visual/GradientLine";
 import CodeBlock from "components/visual/CodeBlock";
 import { MDXProvider } from "@mdx-js/react";
 import styles from "./ArticleLayout.module.css";
+import "katex/dist/katex.min.css";
 
 const ArticleLayout = ({ meta, children }) => {
   const components = {
