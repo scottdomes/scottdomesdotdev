@@ -2,6 +2,8 @@ import Head from "next/head";
 import Layout from "components/layout/Layout";
 import styles from "./Home.module.css";
 import GradientLine from "components/visual/GradientLine";
+import ArticleList from "components/articles/ArticleList";
+import { bestPosts } from "utils/getBestPosts";
 
 export default function Home() {
   return (
@@ -30,7 +32,17 @@ export default function Home() {
           <span className="tri-light">courses, articles, and books</span> to
           help you get better at just that.
         </h2>
+        <GradientLine />
+
         <h2 className={styles.text}>Here are my greatest hits:</h2>
+        <ArticleList articles={bestPosts} />
+        <iframe
+          src="https://scottdomesdev.substack.com/embed"
+          height="320"
+          className={styles.iframe}
+          frameBorder="0"
+          scrolling="no"
+        ></iframe>
       </div>
     </Layout>
   );

@@ -23,7 +23,13 @@
 }
 
 .content p {
+  font-weight: 420;
+  line-height: 32px;
+  font-size: 20px;
   margin-bottom: 23px;
+}
+
+.content li {
   font-weight: 420;
   line-height: 32px;
   font-size: 20px;

@@ -46,6 +46,10 @@
   margin-top: 100px;
 }
 
+.body iframe {
+  width: 100%;
+}
+
 @media small {
   .title {
     font-size: 2.2rem;
