@@ -1,0 +1,11 @@
+@value triLight, triMid, triDark from "styles/colors.css";
+
+.container {
+  border-radius: 5px;
+}
+
+.iframe {
+  border: 1px solid #eee;
+  background: white;
+  width: 100%;
+}

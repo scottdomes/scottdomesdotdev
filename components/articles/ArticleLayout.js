@@ -9,6 +9,7 @@ import RuleDisplay from "components/articles/WolframPattern/RuleDisplay";
 import { MDXProvider } from "@mdx-js/react";
 import styles from "./ArticleLayout.module.css";
 import "katex/dist/katex.min.css";
+import EmailSignup from "./EmailSignup";
 
 const ArticleLayout = ({ meta, children }) => {
   const components = {
@@ -26,13 +27,7 @@ const ArticleLayout = ({ meta, children }) => {
       <MDXProvider components={components}>
         <article className={styles.content}>{children}</article>
       </MDXProvider>
-      <iframe
-        src="https://scottdomesdev.substack.com/embed"
-        height="320"
-        className={styles.iframe}
-        frameBorder="0"
-        scrolling="no"
-      ></iframe>
+      <EmailSignup />
     </Layout>
   );
 };

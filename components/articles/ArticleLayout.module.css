@@ -16,17 +16,15 @@
   width: 100%;
 }
 
-.iframe {
-  border: 1px solid #eee;
-  background: white;
-  width: 100%;
-}
-
 .content p {
   font-weight: 420;
   line-height: 32px;
   font-size: 20px;
   margin-bottom: 23px;
+}
+
+.content blockquote {
+  font-style: italic;
 }
 
 .content li {

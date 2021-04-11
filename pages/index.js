@@ -4,6 +4,7 @@ import styles from "./Home.module.css";
 import GradientLine from "components/visual/GradientLine";
 import ArticleList from "components/articles/ArticleList";
 import { bestPosts } from "utils/getBestPosts";
+import EmailSignup from "components/articles/EmailSignup";
 
 export default function Home() {
   return (
@@ -36,13 +37,7 @@ export default function Home() {
 
         <h2 className={styles.text}>Here are my greatest hits:</h2>
         <ArticleList articles={bestPosts} />
-        <iframe
-          src="https://scottdomesdev.substack.com/embed"
-          height="320"
-          className={styles.iframe}
-          frameBorder="0"
-          scrolling="no"
-        ></iframe>
+        <EmailSignup />
       </div>
     </Layout>
   );
