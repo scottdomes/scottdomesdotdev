@@ -50,10 +50,28 @@
   width: 100%;
 }
 
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.listItem {
+  display: flex;
+}
+
+.bullet {
+  margin-right: 10px;
+  font-size: 3rem;
+}
+
 @media small {
   .title {
     font-size: 2.2rem;
     margin-top: 10px;
+  }
+
+  .bullet {
+    font-size: 2rem;
   }
 
   .text {

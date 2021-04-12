@@ -1,10 +1,9 @@
-import Head from "next/head";
 import Layout from "components/layout/Layout";
 import styles from "./Home.module.css";
 import GradientLine from "components/visual/GradientLine";
-import ArticleList from "components/articles/ArticleList";
 import { bestPosts } from "utils/getBestPosts";
 import EmailSignup from "components/articles/EmailSignup";
+import Article from "components/articles/Article";
 
 export default function Home() {
   return (
@@ -36,7 +35,16 @@ export default function Home() {
         <GradientLine />
 
         <h2 className={styles.text}>Here are my greatest hits:</h2>
-        <ArticleList articles={bestPosts} />
+        <ul className={styles.list}>
+          {bestPosts.map((post) => {
+            return (
+              <li className={styles.listItem}>
+                <span className={styles.bullet}>&rsaquo;</span>
+                <Article key={post.link} post={post} />
+              </li>
+            );
+          })}
+        </ul>
         <EmailSignup />
       </div>
     </Layout>

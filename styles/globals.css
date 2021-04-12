@@ -42,6 +42,10 @@ li {
   margin: 0;
 }
 
+a {
+  color: #1d2671;
+}
+
 a:hover {
   color: #c33764;
 }

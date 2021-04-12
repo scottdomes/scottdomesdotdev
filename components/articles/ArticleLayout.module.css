@@ -1,7 +1,28 @@
 @value small from 'styles/breakpoints.css';
 
+.meta {
+  display: flex;
+  align-items: center;
+}
+
 .title {
   font-size: 3rem;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.imageContainer {
+  margin-right: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+  position: relative;
 }
 
 .description {
@@ -56,5 +77,14 @@
   .title {
     font-size: 2.2rem;
     margin-top: 10px;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .imageContainer {
+    width: 75px;
+    height: 75px;
   }
 }

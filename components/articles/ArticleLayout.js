@@ -7,6 +7,8 @@ import CustomWolframPattern from "components/articles/WolframPattern/Custom";
 import RuleDisplay from "components/articles/WolframPattern/RuleDisplay";
 
 import { MDXProvider } from "@mdx-js/react";
+import Image from "next/image";
+
 import styles from "./ArticleLayout.module.css";
 import "katex/dist/katex.min.css";
 import EmailSignup from "./EmailSignup";
@@ -21,8 +23,12 @@ const ArticleLayout = ({ meta, children }) => {
   };
   return (
     <Layout title={meta.title}>
-      <h1 className={styles.title}>{meta.title}</h1>
-      <h3 className={styles.description}>{meta.description}</h3>
+      <div className={styles.meta}>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>{meta.title}</h1>
+          <h3 className={styles.description}>{meta.description}</h3>
+        </div>
+      </div>
       <GradientLine className={styles.line} />
       <MDXProvider components={components}>
         <article className={styles.content}>{children}</article>
