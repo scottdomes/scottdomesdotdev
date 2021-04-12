@@ -9,6 +9,5 @@ const slugs = [
 ];
 
 export const bestPosts = posts.filter((post) => {
-  console.log(post);
   return slugs.indexOf(post.link) !== -1;
 });
