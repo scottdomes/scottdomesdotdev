@@ -190,7 +190,7 @@ With that done, you should be able to click around your app, moving from screen 
 
 ## Mock API
 
-For real authentication, we'll call an API similar to the one we built in (my Rails authentication tutorial)[https://scottdomes.com/rails-authentication-deploy/]. But for now, for easy development, we're going to create a mock API.
+For real authentication, we'll call an API similar to the one we built in (my Rails authentication tutorial)[https://scottdomes.dev/articles/rails-authentication-deploy/]. But for now, for easy development, we're going to create a mock API.
 
 A good mock API should do three things:
 
@@ -233,7 +233,7 @@ export const login = (email, password, shouldSucceed = true) => {
 
 The `shouldSucceed` parameter allows us to dictate if we want to mock the success of failure of this request. This parameter is for development only, and will soon be removed.
 
-If the request is successful, we return a JSON web token. For more, see [my Rails authentication tutorial](https://scottdomes.com/rails-authentication-deploy/).
+If the request is successful, we return a JSON web token. For more, see [my Rails authentication tutorial](https://scottdomes.dev/articles/rails-authentication-deploy/).
 
 If the request is not successful, we return a human-readable error.
 
@@ -392,7 +392,7 @@ You can copy this code for `CreateAccountScreen`.
 
 As mentioned above, we want to load a list of existing users on our `HomeScreen`. If that request fails with a `401` error, the user's session has expired, and we want to redirect them to the `LoginScreen`.
 
-To do so, we're going to refactor `HomeScreen` to be a class component using a `componentDidMount` [lifecycle method](https://scottdomes.com/react-lifecycle-methods/).
+To do so, we're going to refactor `HomeScreen` to be a class component using a `componentDidMount` [lifecycle method](https://scottdomes.dev/articles/react-lifecycle/).
 
 ```jsx
 import React from "react";
@@ -554,7 +554,7 @@ export default LoginScreen;
 
 We can do the same on `CreateAccountScreen`.
 
-Note that for cleanliness, we will eventually abstract the token setting out of this component, since it's not really [that component's responsibility\(https://scottdomes.com/tiny-components/). But baby steps.
+Note that for cleanliness, we will eventually abstract the token setting out of this component, since it's not really [that component's responsibility\(https://scottdomes.dev/articles/tiny-components/). But baby steps.
 
 As for token setting, in `api/mock.js`, we can import the right method:
 
@@ -808,7 +808,7 @@ As promised, these screens now have as little shared code as is reasonable.
 
 This is the last step: to get rid of our mock methods and use a real API.
 
-For this part, I'll be relying on the API I built and deployed in [my Rails authentication tutorial](https://scottdomes.com/rails-authentication-deploy/). I recommend you go through that tutorial _first_.
+For this part, I'll be relying on the API I built and deployed in [my Rails authentication tutorial](https://scottdomes.dev/articles/rails-authentication-deploy/). I recommend you go through that tutorial _first_.
 
 ### Setting the URL
 

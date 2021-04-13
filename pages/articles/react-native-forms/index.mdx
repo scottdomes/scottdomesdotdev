@@ -8,7 +8,7 @@ export const meta = {
 
 ![](./banner.png)
 
-My last tutorial was on how to write [a simple login/signup flow in React Native](https://scottdomes.com/react-native-authentication/). That tutorial was itself a sequel to a tutorial on making [a simple login/signup back-end in Rails](https://scottdomes.com/rails-authentication-deploy/). So I guess you can say I’ve been on an authentication kick.
+My last tutorial was on how to write [a simple login/signup flow in React Native](https://scottdomes.dev/articles/react-native-authentication/). That tutorial was itself a sequel to a tutorial on making [a simple login/signup back-end in Rails](https://scottdomes.dev/articles/rails-authentication/). So I guess you can say I’ve been on an authentication kick.
 
 There’s a reason for that. Authentication is essential boilerplate. Almost every app has to do it. It’s universal, so we might as well learn to do it well.
 
@@ -131,7 +131,7 @@ Okay, so that's the plan! Our challenge here is to A) make it work and B) make i
 
 ## Getting started
 
-For the purposes of this tutorial, I'm going to assume you followed [my initial guide for React Native authentication](https://scottdomes.com/react-native-authentication/).
+For the purposes of this tutorial, I'm going to assume you followed [my initial guide for React Native authentication](https://scottdomes.dev/articles/react-native-authentication/).
 
 If you haven't and can't be bothered to, the gist is that we have three main screens: `HomeScreen`, `LoginScreen`, and `CreateAccountScreen`. The latter two share an `EmailForm` component. We also have a `fetch` utility for communicating with our back-end.
 
@@ -243,6 +243,7 @@ export default CreateAccount;
 ```
 
 Your app should now look like so:
+
 ![](./iamform.png)
 
 Great start?
@@ -311,6 +312,7 @@ export default Form;
 We iterate over the `keys` of the `fields` object, and use that to create a `TextInput` and label for each one. For the `inputProps`, we just spread them over the input component. Note that this approach is not very tightly controlled: it's up to the engineer using `Form` to implement everything correctly.
 
 This should yield the following result:
+
 ![](./basicfields.png)
 
 ## Controlling values
@@ -395,6 +397,7 @@ return (
 This requires a new `buttonText` prop for `Form`. Create that prop and then pass in "Submit" from `LoginScreen`.
 
 The result:
+
 ![](./submitbutton.png)
 
 Great, but it doesn't _do_ anything. So what do we want to happen?
@@ -596,6 +599,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
 ```
 
 We create an `errorMessage` hook and set it to the error message in our catch. Then, we display it to the user. The result, after a failed login:
+
 ![](./failedlogin.png)
 
 ## Validation
@@ -779,6 +783,7 @@ Last piece: in our `map`, let's add the error message below the field:
 ```
 
 The result:
+
 ![](./validationerror.png)
 
 ## Clearing validation on change
@@ -939,6 +944,7 @@ const Field = ({ fieldName, field, value, onChangeText, error }) => {
 Notice that the `style` prop for the `TextInput` is placed before we spread the `inputProps`, which means consumers of this component could override our styling, if need be.
 
 All this should yield the following result:
+
 ![](./styles1.png)
 
 ## A more colourful button
@@ -996,6 +1002,7 @@ It looks nice, but it gives no indication of being clicked when the user presses
 ## Button animation
 
 Our animation is going to be quite simple: when the button is pressed, the button will move down and get smaller. Here's the final effect:
+
 ![](./buttonanimation.gif)
 
 We're going to use the `Animated` library that comes with React Native to achieve this effect. We'll start with two animated values: `offset` and `scale`. Offset will control the button's position, scale its size.
@@ -1417,7 +1424,7 @@ We want to show the shake:
 1. When the form was previously submitting, but now is not.
 2. When the field has an error.
 
-To do #1, we need to bring in [a lifecycle method](https://scottdomes.com/react-lifecycle-methods/). Let's convert `Field` to a class component:
+To do #1, we need to bring in [a lifecycle method](https://scottdomes.dev/articles/react-lifecycle/). Let's convert `Field` to a class component:
 
 ```jsx
 import React from "react";
@@ -1448,7 +1455,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-If you're unclear about what `componentDidUpdate` does, check [this article](https://scottdomes.com/react-lifecycle-methods/).
+If you're unclear about what `componentDidUpdate` does, check [this article](https://scottdomes.dev/articles/react-lifecycle/).
 
 Okay, let's update the lifecycle method to reflect the logic we described above:
 
@@ -1523,5 +1530,3 @@ Thanks for reading! If you learned something from this article, consider subscri
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
-
-;
