@@ -21,19 +21,19 @@ Let's dive in!
 
 To start, we'll run the `rails new` command with the `--api` option, which skips creating front-end views & such.
 
-```ruby
+```bash
 rails new authentication-boilerplate --api
 ```
 
 Then, we can create a `scaffold` for our User model. `rails generate scaffold` is similar to `rails generate model`, except it also includes a controller for us. Handy.
 
-```
+```bash
 rails g scaffold User email:uniq password:digest
 ```
 
 We want a unique email field and a password digest. Then, we update the database.
 
-```
+```bash
 rails db:migrate
 ```
 
