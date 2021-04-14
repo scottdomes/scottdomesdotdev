@@ -31,7 +31,7 @@ const theme = {
     {
       types: ["tag-id", "selector", "atrule-id"],
       style: {
-        color: "#eeebff",
+        color: "#6c6783",
       },
     },
     {

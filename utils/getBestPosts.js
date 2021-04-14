@@ -6,6 +6,7 @@ const slugs = [
   "/react-lifecycle",
   "/tiny-components",
   "/service-objects",
+  "/flexbox",
 ];
 
 export const bestPosts = posts.filter((post) => {
