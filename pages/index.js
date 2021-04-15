@@ -38,7 +38,7 @@ export default function Home() {
         <ul className={styles.list}>
           {bestPosts.map((post) => {
             return (
-              <li className={styles.listItem}>
+              <li className={styles.listItem} key={post.link}>
                 <span className={styles.bullet}>&rsaquo;</span>
                 <Article key={post.link} post={post} />
               </li>
