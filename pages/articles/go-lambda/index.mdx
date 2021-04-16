@@ -2,11 +2,11 @@ import ArticleLayout from "components/articles/ArticleLayout";
 
 export const meta = {
   title: "Writing & deploying an AWS Lambda function in Go",
-  date: "2021-02-23T22:12:03.284Z",
+  date: "2021-04-16T22:12:03.284Z",
   description: "A gentle introduction to serverless Go",
 };
 
-The goal of this article is to write a super basic Lambda function in Go, and then deploy it to AWS.
+The goal of this article is to create a super basic Lambda function in Go, and then deploy it to AWS.
 
 I like starting off easy when learning new tech, and picking something that feels very manageable. It's easy to layer complexity on top, afterwards: you could take the result of this tutorial and use it to spin up a whole constellation of serverless functions.
 
@@ -20,20 +20,20 @@ Here's what you'll learn in this article:
 
 - how to write a function in Go
 - how to integrate Lambda functionality into Go, including handling requests
-- how to deploy a function to Lambda (and how to automate this step)
+- how to deploy a function to AWS
 - how to test your Lambda function
 
 Let's get to it.
 
 ## The setup
 
-If you haven't already, you need to install Go. Follow the steps [here](https://golang.org/doc/install).
+If you haven't done so before, you need to install Go. Follow the steps [here](https://golang.org/doc/install).
 
-After doing so, I recommend restarting terminal and your code editor, just to ensure everything works right. I'll be using VSCode for this tutorial, and we'll use a couple of its features, but it's not a requirement.
+After doing so, I recommend restarting terminal and your code editor, just to ensure everything works right. I'll be using VS Code for this tutorial, and we'll use a couple of its features, but it's not a requirement.
 
 ## Hello world
 
-Make a new folder called `go-lambda`. Inside, create a file called `main.go`. Let's start with a super basic hello world function.
+Make a new folder called `go-lambda`. Inside, create a file called `main.go`. Let's start with a simple hello world function.
 
 Go organizes code into "packages", which are bits of reuseable code. To build an executeable program, we need to define a "main" package.
 
@@ -81,19 +81,20 @@ To do that, we need to accomplish two things:
 
 1. Integrate the AWS Lambda Go library
 2. Add in request handling
+3. Deploy it
 
 Our goal for this section is to have a function hosted on AWS, that responds with "Helloooo world!" when we call it.
 
 Let's start by integrating the AWS Lambda Go library. There's a couple of things we need to do before we integrate it into our code.
 
-In order to use third-party Go libraries, our Go package also neesd to be a **module**. This might be confusing, so here's the difference between the two:
+In order to use third-party Go libraries, our Go package also needs to be a **module**. This might be confusing, so here's the difference between the two:
 
 1. A package is an executable program
 2. A module is one or many packages with shared dependencies.
 
-Our module will only have one package ("main") and one dependency (the AWS Lambda library). So let's set it up.
+Our module will only have one package ("main") and one dependency (the AWS Lambda library). Let's set that up.
 
-From the termina, run:
+From the terminal, run:
 
 ```bash
 go mod init github.com/<YOUR_USERNAME>/go-lambda
@@ -142,11 +143,11 @@ func main() {
 
 When `main` is called, our Lambda function will boot up and await requests, which will be routed to `HandleRequest`.
 
-Okay, let's test it out and deploy it!
+Okay, let's deploy it!
 
 ## Deploying our code 
 
-A quick note about testing lambdas locally: it seems it is possible and easy to do with AWS SAM, but that would needlessly complicate this tutorial. It's really easy to test lambdas post-deploy, so we'll stick with that.
+A quick note about testing lambdas locally: you can do so using a framework like AWS SAM or Serverless, but I felt it would needlessly complicate this tutorial. It's really easy to test lambdas post-deploy, so we'll stick with that.
 
 To deploy our code, we need to do three steps:
 
@@ -175,9 +176,9 @@ To log in with your AWS credentials, see [this guide](https://docs.aws.amazon.co
 
 To add the proper permissions to your role, see [this guide](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html#permissions-executionrole-console), but be sure to include the `AWSLambda_FullAccess` policy (this allows you to not just invoke but also create and modify Lambda functions).
 
-This might be a frustrating experience if you're a total newbie to AWS, but you only have to set the CLI up once.
+This might be a frustrating experience if you're a total newbie to AWS. Take your time with it. You'll know you've succeeded if the below command works.
 
-When all that is done, we can FINALLY upload our Lambda function. Here's the terminal command:
+When all that is done, we can upload our Lambda function. Here's the terminal command:
 
 ```bash
 aws lambda create-function --function-name test-go-function --runtime go1.x --zip-file fileb://function.zip --handler main --role <ROLE_ARN>
@@ -185,7 +186,7 @@ aws lambda create-function --function-name test-go-function --runtime go1.x --zi
 
 Your `ROLE_ARN` can be found by opening the role up in the IAM console. It'll look something like `arn:aws:iam::<ROLE_ID>:role/<ROLE_NAME>`.
 
-When this completes, you should get back a bit of JSON. Let's test our function out!
+When this completes, you should get back a bit of JSON. Next, we'll try out our deployed function.
 
 ## Testing the function 
 
@@ -282,4 +283,3 @@ Thanks for reading!
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
-```
