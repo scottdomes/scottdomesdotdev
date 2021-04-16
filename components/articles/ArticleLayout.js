@@ -13,7 +13,7 @@ import styles from "./ArticleLayout.module.css";
 import "katex/dist/katex.min.css";
 import EmailSignup from "./EmailSignup";
 
-const ArticleLayout = ({ meta, children }) => {
+const ArticleLayout = ({ meta, children, noEmail = false }) => {
   const components = {
     code: CodeBlock,
     WolframPattern,
@@ -33,7 +33,7 @@ const ArticleLayout = ({ meta, children }) => {
       <MDXProvider components={components}>
         <article className={styles.content}>{children}</article>
       </MDXProvider>
-      <EmailSignup />
+      {!noEmail && <EmailSignup />}
     </Layout>
   );
 };

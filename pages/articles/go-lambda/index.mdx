@@ -1,0 +1,285 @@
+import ArticleLayout from "components/articles/ArticleLayout";
+
+export const meta = {
+  title: "Writing & deploying an AWS Lambda function in Go",
+  date: "2021-02-23T22:12:03.284Z",
+  description: "A gentle introduction to serverless Go",
+};
+
+The goal of this article is to write a super basic Lambda function in Go, and then deploy it to AWS.
+
+I like starting off easy when learning new tech, and picking something that feels very manageable. It's easy to layer complexity on top, afterwards: you could take the result of this tutorial and use it to spin up a whole constellation of serverless functions.
+
+But let's start small.
+
+Why use Go? It's fast, concise, and robust, but more than that... every developer I know who uses it, loves it. So let's try it out.
+
+Why use Lambda? It's quick & cheap. For a more detailed take, see [my article on it](/articles/lambda).
+
+Here's what you'll learn in this article:
+
+- how to write a function in Go
+- how to integrate Lambda functionality into Go, including handling requests
+- how to deploy a function to Lambda (and how to automate this step)
+- how to test your Lambda function
+
+Let's get to it.
+
+## The setup
+
+If you haven't already, you need to install Go. Follow the steps [here](https://golang.org/doc/install).
+
+After doing so, I recommend restarting terminal and your code editor, just to ensure everything works right. I'll be using VSCode for this tutorial, and we'll use a couple of its features, but it's not a requirement.
+
+## Hello world
+
+Make a new folder called `go-lambda`. Inside, create a file called `main.go`. Let's start with a super basic hello world function.
+
+Go organizes code into "packages", which are bits of reuseable code. To build an executeable program, we need to define a "main" package.
+
+This is really easy. At the top of `main.go`, put the following:
+
+```go
+package main
+```
+
+Next, we want to import the `fmt` package, which allows us to do a print statement. Below `package main`, put the following:
+
+```go
+import (
+  "fmt"
+)
+```
+
+And lastly, we put our main function:
+
+```go
+func main(){
+ fmt.Println("Helloooo world!")
+}
+```
+
+If you run `go run main.go` in your terminal, you should see "Helloooo world!" printed.
+
+Here's the whole file, for reference:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Helloooo world!")
+}
+```
+
+## Integrating Lambda
+
+Next, we want to deploy our Hello World function to AWS, so we can test it out.
+
+To do that, we need to accomplish two things:
+
+1. Integrate the AWS Lambda Go library
+2. Add in request handling
+
+Our goal for this section is to have a function hosted on AWS, that responds with "Helloooo world!" when we call it.
+
+Let's start by integrating the AWS Lambda Go library. There's a couple of things we need to do before we integrate it into our code.
+
+In order to use third-party Go libraries, our Go package also neesd to be a **module**. This might be confusing, so here's the difference between the two:
+
+1. A package is an executable program
+2. A module is one or many packages with shared dependencies.
+
+Our module will only have one package ("main") and one dependency (the AWS Lambda library). So let's set it up.
+
+From the termina, run:
+
+```bash
+go mod init github.com/<YOUR_USERNAME>/go-lambda
+```
+
+We initialize our module with a URL. If you don't plan on hosting this on Github, you could use `example.com/whatever`. It doesn't really matter, for our purposes.
+
+Then, install the AWS Lambda library:
+
+```bash
+go get github.com/aws/aws-lambda-go/lambda
+```
+
+At the end of this step, you should see a couple of new files generated: `go.sum` and `go.mod`. These files track the dependencies of our module.
+
+To start using the AWS package, we can adjust our import statement:
+
+```go
+import (
+	"context"
+	"github.com/aws/aws-lambda-go/lambda"
+)
+```
+
+We're also importing the `context` package, which will be used to access request metadata (we won't use this for anything, but it's good to know about). Lastly, we drop the `fmt` package, as we don't need it anymore.
+
+## Writing a request handler
+
+Our Lambda requires a custom request handler. This function should return either a result or an error. Here's what it looks like:
+
+```go
+func HandleRequest(ctx context.Context) (string, error) {
+	return "Helloooo world!", nil
+}
+```
+
+It takes in the context and returns a string for the result, and `nil` for the error. 
+
+With this in place, we simply modify our `main` function like so:
+
+```go
+func main() {
+	lambda.Start(HandleRequest)
+}
+```
+
+When `main` is called, our Lambda function will boot up and await requests, which will be routed to `HandleRequest`.
+
+Okay, let's test it out and deploy it!
+
+## Deploying our code 
+
+A quick note about testing lambdas locally: it seems it is possible and easy to do with AWS SAM, but that would needlessly complicate this tutorial. It's really easy to test lambdas post-deploy, so we'll stick with that.
+
+To deploy our code, we need to do three steps:
+
+1. Build the binary
+2. Zip it
+3. Upload it to AWS
+
+The first two are easy. Run the following commands:
+
+```bash
+GOOS=linux go build main.go
+zip function.zip main
+```
+
+The first creates a binary intended for the Linux operating system (which AWS uses). The second creates a zipfile called `function.zip`.
+
+For the next step, you'll need a few things:
+
+1. An AWS account
+2. The AWS CLI installed and authenticated
+3. An IAM role with full Lambda permissions
+
+You can create a free AWS account [here](https://aws.amazon.com/free/). To install the CLI, see [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html). 
+
+To log in with your AWS credentials, see [this guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html). The important thing is to create a new IAM role and use the Access Key and Secret Access Key from that role, not the root account. 
+
+To add the proper permissions to your role, see [this guide](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html#permissions-executionrole-console), but be sure to include the `AWSLambda_FullAccess` policy (this allows you to not just invoke but also create and modify Lambda functions).
+
+This might be a frustrating experience if you're a total newbie to AWS, but you only have to set the CLI up once.
+
+When all that is done, we can FINALLY upload our Lambda function. Here's the terminal command:
+
+```bash
+aws lambda create-function --function-name test-go-function --runtime go1.x --zip-file fileb://function.zip --handler main --role <ROLE_ARN>
+```
+
+Your `ROLE_ARN` can be found by opening the role up in the IAM console. It'll look something like `arn:aws:iam::<ROLE_ID>:role/<ROLE_NAME>`.
+
+When this completes, you should get back a bit of JSON. Let's test our function out!
+
+## Testing the function 
+
+Go to the Lambda console in AWS. Click Functions on the lefthand menu, and open up our `test-go-function`.
+
+You should see the Function overview. Below that, open up the 'Test' menu. Click the 'Test' button. You should see "Execution result: succeeded". When you open the 'Details', you should see a return value of "Helloooo world!".
+
+If you didn't, ensure your function was uploaded correctly, or that your code is correct.
+
+Nice! We have a hosted Lambda function written in Go. Let's try making it a little more useful.
+
+## Basic addition
+
+To see how we can work with parameters, let's modify our function to take two numbers and add them together, returning the result as a string.
+
+First, we need to define a `Struct` for our parameters with their types:
+
+```go
+type AdditionEvent struct {
+	Number1 int `json:"number1"`
+	Number2 int `json:"number2"`
+}
+```
+
+We call this an `AdditionEvent` since it is the result of a request "event" occurring.
+
+Next, we use these numbers in our function:
+
+```go
+func HandleRequest(ctx context.Context, numbers AdditionEvent) (string, error) {
+	return strconv.Itoa(numbers.Number1 + numbers.Number2), nil
+}
+```
+
+We access the numbers via the `AdditionEvent`, and convert the result into a string (remember to add `strconv` to our import statement!).
+
+The full code: 
+
+```go
+package main
+
+import (
+	"context"
+	"strconv"
+
+	"github.com/aws/aws-lambda-go/lambda"
+)
+
+type AdditionEvent struct {
+	Number1 int `json:"number1"`
+	Number2 int `json:"number2"`
+}
+
+func HandleRequest(ctx context.Context, numbers AdditionEvent) (string, error) {
+	return strconv.Itoa(numbers.Number1 + numbers.Number2), nil
+}
+
+func main() {
+	lambda.Start(HandleRequest)
+}
+```
+
+Now, we want to update our function. We can do this by running the following three commands:
+
+```bash
+GOOS=linux go build main.go
+zip function.zip main
+aws lambda update-function-code --function-name test-go-function --zip-file fileb://function.zip
+```
+
+... but that will get annoying fast, if we want to deploy multiple times.
+
+If you're using VSCode, you can set this up as a default build task. Copy my code [here](https://github.com/scottdomes/go-lambda/blob/main/.vscode/tasks.json) (including the folder path) and then hit `⇧⌘B` to set it up. There's more documentation [here](https://code.visualstudio.com/docs/editor/tasks); the end result is being able to deploy just by pressing `⇧⌘B`.
+
+Whether you set up a task or just ran those commands manually, your function should now be updated. Go to the function page in AWS Lambda, and back to the 'Test' tab. 
+
+If you scroll down, you should see the 'Test event' section. Modify the JSON to look like so:
+
+```json
+{
+  "number1": 1,
+  "number2": 3,
+}
+```
+
+When you hit the 'Test' button, you should get the result of `4`. Good work!
+
+## Done
+
+Our function doesn't do much at the moment, but you have the basics down now, and can easily extend this function to be part of an actual API. I hope this was a good first experience with Go & Lambda; subscribe to my email list for future articles like this.
+
+Thanks for reading!
+
+export default ({ children }) => (
+  <ArticleLayout meta={meta}>{children}</ArticleLayout>
+);
+```
