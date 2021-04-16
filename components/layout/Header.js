@@ -9,8 +9,8 @@ const Header = () => {
       <Container className={styles.inner}>
         <Logo />
         <div className={styles.linkContainer}>
-          <Link href="/courses">Courses</Link>
           <Link href="/articles">Articles</Link>
+          <Link href="/hire">Hire me</Link>
         </div>
       </Container>
     </div>
