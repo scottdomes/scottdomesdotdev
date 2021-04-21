@@ -1,0 +1,138 @@
+import ArticleLayout from "components/articles/ArticleLayout";
+
+export const meta = {
+  title: "Always aim to reduce complexity",
+  date: "2021-04-21T22:12:03.284Z",
+  description: "Principles of refactoring",
+};
+
+Imagine going about your day and suddenly encountering a 500 line function. You're given a simple task to add some functionality. Let's say it looks something like this:
+
+```js
+const createInvoice = (product) => {
+  // hundreds of lines of unrelated code
+
+  let price = 0;
+
+  switch (product.type) {
+    case PRODUCT_TYPES.foosballTable:
+      price = 233.33;
+    case PRODUCT_TYPES.airHockeyTable:
+      price = 350.5;
+    case PRODUCT_TYPES.poolTable:
+      price = 900.99;
+    default:
+      throw "No price found";
+  }
+
+  // hundreds of lines of unrelated code
+};
+```
+
+Your job is to add a new product type, a ping pong table, with a price of $500.
+
+Here's what the solution might look like:
+
+```js
+const createInvoice = (product) => {
+  // hundreds of lines of unrelated code
+
+  let price = 0;
+
+  switch (product.type) {
+    case PRODUCT_TYPES.foosballTable:
+      price = 233.33;
+    case PRODUCT_TYPES.airHockeyTable:
+      price = 350.5;
+    case PRODUCT_TYPES.poolTable:
+      price = 900.99;
+    case PRODUCT_TYPES.pingPongTable:
+      price = 500.0;
+    default:
+      throw "No price found";
+  }
+
+  // hundreds of lines of unrelated code
+};
+```
+
+Easy enough. You can bang that out in five minutes and go back to daydreaming about your upcoming Mexican vacation.
+
+Except, maybe you shouldn't.
+
+## Creeping complexity
+
+In the above change, our 500 line function has now become a 502 line function.
+
+It's a trivial change, but it has contributed to making that function longer and thus harder to read. In fact, this 500 line function likely evolved from a series of similar small changes.
+
+Slowly but surely, your codebase is getting worse. Which means your team is getting slower and unhappier.
+
+A bit dramatic for two lines of code? Maybe. But imagine your task was to add a whole new 10 line switch statement: would you take the same approach?
+
+## Simpler, first
+
+Here's a simple principle that's hard to follow: every change to the codebase should make it better.
+
+In practice, here's what we might do:
+
+```js
+const calculatePrice = (productType) => {
+  let price = 0;
+
+  switch (product.type) {
+    case PRODUCT_TYPES.foosballTable:
+      price = 233.33;
+    case PRODUCT_TYPES.airHockeyTable:
+      price = 350.5;
+    case PRODUCT_TYPES.poolTable:
+      price = 900.99;
+    case PRODUCT_TYPES.pingPongTable:
+      price = 500.0;
+    default:
+      throw "No price found";
+  }
+
+  return price;
+};
+
+const createInvoice = (product) => {
+  // hundreds of lines of unrelated code
+
+  calculatePrice(product.type);
+
+  // hundreds of lines of unrelated code
+};
+```
+
+Now, the big function has gotten a little bit smaller. The codebase is a little better.
+
+If everyone takes this approach, this function will continue shrinking. Imagine a perpetually improving codebase.
+
+## Reduce, then increase
+
+Our job as developers is often to *add complexity*. We add new features and functionality to the product, which makes it more complicated.
+
+Constant increasing complexity is how you get tech debt: an intractable mess of code. That's how companies die.
+
+But we can take a more positive approach. Before we add new complexity, we can seek to reduce existing complexity. We can make our codebase a little bit better.
+
+This often makes it easier to add new functionality, as well.
+
+Reduce before you increase.
+
+## The cost
+
+In this case, with this change, your work now takes ten minutes instead of two minutes. But imagine a more difficult situation, where reducing complexity means your work goes from one hour to five hours. Is it worth it?
+
+Well, as with anything, it depends. Is there a strict deadline? Will the product sink or swim based on the quick deployment of this feature? If so, maybe it's time to just get shit done.
+
+But most of the time, that isn't the case. Most of the time, we have some slack to refactor first.
+
+That extra effort is worth it.
+
+(This article was inspired by a similar section in *[Refactoring: Improving the Design of Existing Code](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599)*. Subscribe to my email list to get more principles like this.)
+
+export default ({ children }) => (
+  <ArticleLayout meta={meta}>{children}</ArticleLayout>
+);
