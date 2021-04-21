@@ -8,7 +8,7 @@ export const meta = {
 
 The goal of this article is to create a super basic Lambda function in Go, and then deploy it to AWS.
 
-I like starting off easy when learning new tech, and picking something that feels very manageable. It's easy to layer complexity on top, afterwards: you could take the result of this tutorial and use it to spin up a whole constellation of serverless functions.
+I like starting off easy when learning new tech, and picking a project that feels very manageable. It's easy to add complexity afterwards: you could take the result of this tutorial and use it to spin up a whole constellation of serverless functions.
 
 But let's start small.
 
@@ -51,7 +51,7 @@ import (
 )
 ```
 
-And lastly, we put our main function:
+And lastly, our main function:
 
 ```go
 func main(){
@@ -77,13 +77,13 @@ func main() {
 
 Next, we want to deploy our Hello World function to AWS, so we can test it out.
 
-To do that, we need to accomplish two things:
+To do that, we need to accomplish three things:
 
 1. Integrate the AWS Lambda Go library
 2. Add in request handling
 3. Deploy it
 
-Our goal for this section is to have a function hosted on AWS, that responds with "Helloooo world!" when we call it.
+Our goal for this section is to have a function hosted on AWS that responds with "Helloooo world!" when we call it.
 
 Let's start by integrating the AWS Lambda Go library. There's a couple of things we need to do before we integrate it into our code.
 
@@ -100,7 +100,7 @@ From the terminal, run:
 go mod init github.com/<YOUR_USERNAME>/go-lambda
 ```
 
-We initialize our module with a URL. If you don't plan on hosting this on Github, you could use `example.com/whatever`. It doesn't really matter, for our purposes.
+We initialize our module with a URL. If you don't plan on hosting this on Github, you could use `example.com/whatever`. It doesn't really matter, for our purposes; it's only relevant if you were making a package for others to use.
 
 Then, install the AWS Lambda library:
 
@@ -194,7 +194,7 @@ Go to the Lambda console in AWS. Click Functions on the lefthand menu, and open 
 
 You should see the Function overview. Below that, open up the 'Test' menu. Click the 'Test' button. You should see "Execution result: succeeded". When you open the 'Details', you should see a return value of "Helloooo world!".
 
-If you didn't, ensure your function was uploaded correctly, or that your code is correct.
+If you didn't, ensure your function was uploaded correctly and that your code is correct.
 
 Nice! We have a hosted Lambda function written in Go. Let's try making it a little more useful.
 
