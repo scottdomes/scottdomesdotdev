@@ -200,7 +200,148 @@ If `Ok`, we tell `parse()` to just return the number. If there's an `Err`, no ma
 
 # Common programming concepts in Rust
 
-Coming soon.
+## Variables and mutability
+
+Good explanation of the tradeoff of immutability: with large data structures, constantly making new immutable versions may be expensive performance-wise; however, the code is easier to reason about. With small data structures it's a no brainer: the performance cost is worth it.
+
+Variables in Rust are immutable by default, but Rust also supports _constants_. Constants cannot be made mutable. They are declared via _const_, and the type must be specified.
+
+```rust
+const MAX_POINTS: u32 = 100_000;
+```
+
+Constants can be declared in any scope, including global scope: good for globally used values. They cannot be assigned as the result of a function call, or any compute value. In other words, you need to know what the constant is going to be from the moment you write it.
+
+Constants also endure for the length of your program. They use the uppercase style seen above. So they're a great fit for unchanging values that multiple parts of your app needs to know about.
+
+Rust also supports something called _shadowing_. Here's an example:
+
+```rust
+fn main() {
+    let x = 5;
+
+    let x = x + 1;
+
+    let x = x * 2;
+
+    println!("The value of x is: {}", x);
+}
+```
+
+We overwrite `x`, an immutable variable, by repeating the `let` keyword. This means we can perform a few transformations, but still end up with an immutable variable.
+
+This essentially creates a new variable, but with the same name.
+
+By shadowing, you can change a variable's type, which is not allowed for mutable variables (they must always stay the same type). Here's an example:
+
+```rust
+let spaces = "   ";
+let spaces = spaces.len();
+```
+
+The Rust book claims this is superior to having to name `spaces_str` and `spaces_num`. Is it? I'm not convinced, yet. Seems somewhat dangerous. What if you forget you have an existing variable and accidentally shadow it?
+
+## Data types
+
+Scalar types: integers, floats, booleans, and characters.
+
+Compound types: tuples and arrays.
+
+With integers, they can be 8, 16, 32, 64, 128, or arch in size. Arch depends on the architecture you're using: 64-bit or 32-bit.
+
+An integers can be signed or unsigned. Unsigned means it cannot be negative. Signed means we also need to store info about whether it's positive or negative.
+
+So you end up with the following integer types: i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize.
+
+The default type is `i32`, a good choice most of the time. You might use `isize` or `usize` when indexing a collection, to get the best performance from the architecture.
+
+For floats, it's just `f32` or `f64`, defaulting to `f64`.
+
+For booleans, it's real simple:
+
+```rust
+let t = true;
+
+let f: bool = false;
+```
+
+You don't need the type declaration, but can add it.
+
+The char type is used for a single character, declared with single quotes (vs string literals, which are double quotes):
+
+```rust
+fn main() {
+    let c = 'z';
+    let z = 'ℤ';
+    let heart_eyed_cat = '😻';
+}
+```
+
+Tuples are a fixed-length grouping of variables. Each position has a specific type. 
+
+```rust
+fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+}
+```
+
+You can use type inference, as well. Here's how you access values:
+
+```rust
+fn main() {
+    let tup = (500, 6.4, 1);
+
+    let (x, y, z) = tup;
+
+    println!("The value of y is: {}", y);
+}
+```
+
+Another way to access:
+
+```rust
+fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    let five_hundred = x.0;
+
+    let six_point_four = x.1;
+
+    let one = x.2;
+}
+```
+
+Arrays are also fixed-length, and must all be the same type.
+
+```rust
+let a = [1, 2, 3, 4, 5];
+```
+
+Arrays are allocated to the stack instead of the heap. Most of the time, you'll want to use a vector (a type provided by the standard library) instead of an array, since a vector can grow or shrink in size. 
+
+Arrays are good for when the length isn't going to change. 
+
+Here's how you'd declare the type:
+
+```rust
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+```
+
+This means this array has five elements of type `i32`.
+
+You can also create an array of a certain length with all the same values:
+
+```rust
+let a = [3; 5];
+```
+
+This will create an array that is `[3,3,3,3,3]`.
+
+Array access is just `a[0]`.
+
+If you try to access an index outside the array's length, Rust will panic and throw a runtime error. Apparently, many low-level languages will let you access invalid memory in this situation: good job, Rust.
+
+## Functions
 
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
