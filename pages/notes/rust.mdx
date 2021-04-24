@@ -63,6 +63,84 @@ To make an optimized release build, run:
 cargo build --release
 ```
 
+# Programming a guessing game
+
+To import a package (in this case the `io` package from the standard library), use:
+
+```rust
+use std::io;
+```
+
+Certain parts of the standard library are always imported, and known as [the prelude](https://doc.rust-lang.org/std/prelude/index.html).
+
+Rust variables are immutable by default (nice). To make one:
+
+```rust
+let foo = 5;
+```
+
+Make it mutable:
+
+```rust
+let mut foo = 5;
+```
+
+In the below code:
+
+```rust
+let mut string = String::new();
+```
+
+... we're calling the `new` associated function on the String type. An associated function belongs to a type, not an instance. AKA a static method.
+
+Many functions can return a `Result` type. `Result` types are enums, with either the value of `Ok` or `Err`. 
+
+If you want an `Err` Result to crash your program with a useful message, you can use `expect`. Here's an example of reading the user's CLI and showing a message on a failure:
+
+```rust
+io::stdin()
+    .read_line(&mut guess)
+    .expect("Failed to read line");
+```
+
+(`&mut guess` is declaring a mutable reference. More on those later.)
+
+Unhandled Results will result in a warning at compile time. (`expect` isn't really "handling" the error, per se, but it will suppress the warning; if you write `expect`, you want the program to crash when the `Result` is wrong.)
+
+You can do string interpolation like so:
+
+```rust
+let x = 5;
+let y = 10;
+
+println!("x = {} and y = {}", x, y);
+```
+
+Rust calls packages "crates". Your project is a "binary crate"; it's meant to be executed. Packages you use in your project are "library crates"; they're meant to be used by other programs.
+
+To add a dependency, modify `Cargo.toml` like so:
+
+```toml
+[dependencies]
+rand = "0.5.5"
+```
+
+You can view crates via [Crates.io](https://crates.io/).
+
+Your crate versions will stay the same thanks to `Cargo.lock`. To upgrade all your packages, run `cargo update`. Note that this will only upgrade minor version. `0.5.5` will become `0.5.6`, but never `0.6.0`; you have to manually upgrade to `0.6.0` via `Cargo.toml`.
+
+Here's another example of importing and using a crate:
+
+```rust
+use rand::Rng;
+
+let secret_number = rand::thread_rng().gen_range(1, 101);
+```
+
+We import the `Rng` trait of the `rand` crate; that must be in scope to allow us to use methods related to random number generators. We then call the `rng::thread_rng` function that gives us a random number generator that is local to the current thread. Then we call its `gen_range` method.
+
+To see documentation for YOUR dependencies, run `cargo doc --open`. Pretty neat.
+
 
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
