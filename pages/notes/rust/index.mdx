@@ -343,6 +343,106 @@ If you try to access an index outside the array's length, Rust will panic and th
 
 ## Functions
 
+Snake case, baby. 
+
+```rust
+fn another_function() {
+    println!("Another function.");
+}
+```
+
+You can define and call your functions in any order in the same file; it doesn't matter to Rust.
+
+Here it is with parameters:
+
+```rust
+fn main() {
+    another_function(5);
+}
+
+fn another_function(x: i32) {
+    println!("The value of x is: {}", x);
+}
+```
+
+Function signatures require type declarations! All arguments must have their types defined.
+
+Note that statements in Rust do not return values. So in Ruby, you might do:
+
+```ruby
+x = y = 2
+```
+
+And in JavaScript you might do:
+
+```js
+const x = function() { console.log('Function') };
+```
+
+Well, in Rust, neither of those work. Statements do not return values, but expressions do.
+
+`5 + 6` is an expression. Calling a function is an expression. Calling a macro is an expression.
+
+Here's a more complex example of an expression:
+
+```rust
+fn main() {
+    let x = 5;
+
+    let y = {
+        let x = 3;
+        x + 1
+    };
+
+    println!("The value of y is: {}", y);
+}
+```
+
+This part is an expression, which evaluates to 4:
+
+```rust 
+{
+    let x = 3;
+    x + 1
+}
+```
+
+Thus, we can assign it to `y`. 
+
+Note the tricky thing here: `x + 1` does not end in a semicolon! Expressions do not have semicolons. If you add one there, it becomes a statement, and doesn't return a value. Tricky tricky.
+
+To have a function return a value, we need to declare the return type and add an expression to the body:
+
+```rust
+fn five() -> i32 {
+    5
+}
+```
+
+Another example:
+
+```rust
+fn main() {
+    let x = plus_one(5);
+
+    println!("The value of x is: {}", x);
+}
+
+fn plus_one(x: i32) -> i32 {
+    x + 1
+}
+```
+
+Note that if we changed `x + 1` to `x + 1;`, we'd get an error. The function no longer returns an `i32`. The actual error would say mismatched type, since statements evalute to `()`, an empty tuple, so that would be our return value. 
+
+## Comments
+
+```rust
+// Comments are easy
+```
+
+## Control flow
+
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
