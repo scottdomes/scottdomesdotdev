@@ -539,6 +539,36 @@ fn main() {
 
 # Ownership
 
+A unique feature to Rust. It allows Rust to have memory safety without a garbage collector. 
+
+Other languages use one of two options for managing memory:
+
+1. A garbage collector trolls about for memory that is no longer needed.
+2. The programmer explicitly allocates and frees memory.
+
+## Refresher on stack & heap
+
+Whether a value is stored on stack or heap matters in Rust. Here's what each means:
+
+Stack stores value in last in, first out. Like a stack of plates. All data must be of fixed size. You _push on_ data and then _pop off_ when you need it.
+
+Heap stores values by address, which is called a pointer. Requesting a certain amount of memory and getting a pointer back is called _allocating_. To get your data, follow the pointer.
+
+The stack is faster, since you don't have to find a place: you just push it onto the stack. When you call a function, its values are put onto the stack for fast access, and then popped off when you're done.
+
+Managing the heap is the goal of garbage collectors (in other languages) and ownership rules (in Rust). We want to avoid duplicate data and clean up unused data.
+
+## Back to ownership
+
+Here are the three rules of ownership:
+
+"Each value in Rust has a variable that’s called its owner.
+There can only be one owner at a time.
+When the owner goes out of scope, the value will be dropped."
+
+
+
+
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
