@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <Layout>
       <h1 className={styles.title}>
-        <span className="tri-dark">Courses, articles, and books</span> to help
+        <span className="tri-dark">Guides & tutorials</span> to help
         you become{" "}
         <span className="tri-light">an insanely productive developer.</span>
       </h1>
@@ -29,7 +29,7 @@ export default function Home() {
         </h2>
         <h2 className={styles.text}>
           I write{" "}
-          <span className="tri-light">courses, articles, and books</span> to
+          <span className="tri-light">guides, tutorials, and books</span> to
           help you get better at just that.
         </h2>
         <GradientLine />

@@ -1,7 +1,12 @@
 @value small from 'styles/breakpoints.css';
+@value triLight, triMid, triDark from "styles/colors.css";
 
 .title {
   font-size: 3rem;
+}
+
+.title:hover {
+  color: triLight;
 }
 
 .description {
