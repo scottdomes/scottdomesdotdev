@@ -592,6 +592,105 @@ In Rust, that memory is automatically freed when our String goes out of scope. W
 
 So the variable `string` "owns" the memory used to store `"hello"`, and once it is out of scope, that memory is free.
 
+Here's an example of allocation with a String:
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1;
+```
+
+When `s1` is created, behind the scenes it is composed of three things:
+
+1. Length (in this case, 5)
+2. Capacity (also 5)
+3. A pointer to the memory in the heap where it is stored
+
+(Length is how much memory the string is using, capacity is how much has been allocated to it.)
+
+`s2` has the same length, capacity, and pointer. No new memory needs to be allocated, which is efficient.
+
+But the downside is that `s1` and `s2` have the same pointer, so when they are `drop`ped, you would normally get what's called a "double free" error: trying to free the same memory twice.
+
+So to avoid this, Rust does something sneaky: it invalidates `s1`. If you try to use it like so...
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1;
+
+println!("{}, world!", s1);
+```
+
+... you get a "borrow of moved value" error. The pointer has been moved from `s1` to `s2`, so `s1` is useless now: it is effectively out of the scope.
+
+If you _did_ want to properly _copy_ `s1`, and create a new pointer in memory for `s2`, you can use the `clone` method:
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1.clone();
+
+println!("s1 = {}, s2 = {}", s1, s2);
+```
+
+This works just fine.
+
+Now, there are some exceptions to this. Things like integers are of fixed size and thus cheap to copy, so Rust does it automatically. E.g. the below code works fine:
+
+```rust
+let x = 5;
+let y = x;
+
+println!("x = {}, y = {}", x, y);
+```
+
+Behind the scenes, it does the same thing as:
+
+```rust
+let x = 5;
+let y = x.clone();
+
+println!("x = {}, y = {}", x, y);
+```
+
+Integers possess a trait called `Copy` that drives this behaviour, which you can add to your own types. `Copy` types are stored entirely on the stack. Other types that are automatically `Copy`-ed:
+
+- all integers
+- booleans
+- floats
+- chars 
+- tuples of `Copy` types
+
+Ownership also means values can "move" into functions:
+
+```rust
+fn main() {
+    let s = String::from("hello");  // s is stored in heap
+
+    takes_ownership(s);  // s's value moves into the function...
+    // s can no longer be used in this scope
+}
+
+fn some_function(some_string: String) { // some_string comes into scope
+    println!("{}", some_string);
+} // some_string goes out of scope, is dropped, and memory in heap is freed
+```
+
+Again, it's different with integers and other `Copy` types:
+
+```rust
+fn main() {
+    let x = 5;  // x is stored in stack
+
+    takes_ownership(x);  // x's value moves into the function...
+    // but since x is Copy, it can still be used here
+}
+
+fn some_function(some_number: i32) { // some_number comes into scope
+    println!("{}", some_string);
+} // some_number goes out of scope, but nothing happens
+```
+
+
+
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
