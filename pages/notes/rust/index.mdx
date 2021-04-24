@@ -566,8 +566,31 @@ Here are the three rules of ownership:
 There can only be one owner at a time.
 When the owner goes out of scope, the value will be dropped."
 
+Here's an example of scope:
 
+```rust
+fn main() { // s is not valid here
+  let s = "hello"; // s becomes valid
 
+  // s is valid here
+} // scope over, s no longer valid
+```
+
+The above is a string literal, which are immutable. If you want a mutable string, use `String`:
+
+```rust
+let string = String::from("hello");
+```
+
+More on Strings later, but first, a question: why is a string literal immutable, and a String mutable? 
+
+A string literal is immutable because its size is known at compile time: it becomes hardcoded into the final executable. Since a String is mutable, we need to allocate memory in the heap for it, instead. 
+
+That implies allocating the memory, and then freeing it once we're done with our String.
+
+In Rust, that memory is automatically freed when our String goes out of scope. When our variable `string` goes out of scope, Rust calls a function called `drop` behind the scenes (this happens at the last curly bracket of the scope). This frees up the memory.
+
+So the variable `string` "owns" the memory used to store `"hello"`, and once it is out of scope, that memory is free.
 
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
