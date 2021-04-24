@@ -7,6 +7,7 @@ import custom from "./theme2";
 
 (typeof global !== "undefined" ? global : window).Prism = Prism;
 require("prismjs/components/prism-ruby");
+require("prismjs/components/prism-rust");
 
 export default function CodeBlock({ children, className }) {
   const language = className

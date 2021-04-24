@@ -1,0 +1,69 @@
+import ArticleLayout from "components/articles/ArticleLayout";
+
+export const meta = {
+title: "The Rust Book",
+date: "2021-04-23T22:40:32.169Z",
+description: "Getting started with Rust"
+}
+
+*You can read the Rust book in full [here](https://doc.rust-lang.org/book/title-page.html)*.
+
+# Getting Started
+
+You can run `rustup doc` to access the documentation, even when offline.
+
+Make a hello world via the following:
+
+```rust
+// main.rs
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+Then run: 
+
+```bash
+rustc main.rs
+./main
+```
+
+You can run `rustfmt` from the command line to format files. [This](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust) is a VS Code extension for Rust projects, whereas [this one](https://marketplace.visualstudio.com/items?itemName=statiolake.vscode-rustfmt) works for single files.
+
+*Macros* are invoked like `println!("Hello world!")` whereas functions are invoked without the exclamation mark. More on those later.
+
+Rust is a compiled language, which means you compile a binary that anyone can then run (even without Rust installed). Running is thus two steps: compiling and running, vs how it is one step for dynamic languages like JavaScript, Ruby.
+
+Cargo is Rust's build system and package manager. Its config file is written in TOML, which stands for Tom's Obvious, Minimal Language. Great name.
+
+Best practice is to initialize a new Rust project via `cargo new my_project`.
+
+To build a cargo project, run the following:
+
+```bash
+cargo build
+./target/debug/my_project
+```
+
+Or you can just use:
+
+```bash
+cargo run
+```
+
+If you want to just see if it compiles correctly, run:
+
+```bash
+cargo check
+```
+
+To make an optimized release build, run:
+
+```bash
+cargo build --release
+```
+
+
+export default ({ children }) => (
+  <ArticleLayout meta={meta}>{children}</ArticleLayout>
+);
