@@ -1039,6 +1039,82 @@ rect1 is Rectangle {
 
 ## Struct method syntax
 
+Methods are functions that are defined within the context of a struct (or enum or trait object); their first parameter is always self, which refers to the instance.
+
+To define a method, you must define the struct and then implement the method:
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+```
+
+To invoke a method:
+
+```
+rect1.area();
+```
+
+If you wanted your method to mutate the instance, you'd have to specify `&mut self` as the parameter.
+
+You can also have the method take ownership of `self` (and not use a reference), but that's rare.
+
+To implement multiple methods, put them in the same `impl` block:
+
+```rust
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+```
+
+You can also write this in multiple `impl` blocks, though it's uglier:
+
+```rust
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+impl Rectangle {
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+```
+
+## Associated functions
+
+You can also do this:
+
+```rust
+impl Rectangle {
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+```
+
+... but since `square` does not receive `self` as an argument, it's not a method. It's called an associated function, and you invoke it via `Rectangle::square(3);`. It's like a class method in Ruby.
+
+
+
 
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
