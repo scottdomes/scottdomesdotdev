@@ -1380,6 +1380,281 @@ if let Some(3) = some_u8_value {
 }
 ```
 
+# Packages and crates
+
+Definitions:
+
+- a crate is a binary or library
+- a package is one or more crates that provide a set of functionality
+
+A package contains a `Cargo.toml` file. When you run `cargo new`, you get a package.
+
+Modules are groups of code within a crate. You can define a module with the `mod` keyword.
+
+Here's some nested modules for a restaurant app:
+
+```rust
+mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+
+        fn seat_at_table() {}
+    }
+
+    mod serving {
+        fn take_order() {}
+
+        fn serve_order() {}
+
+        fn take_payment() {}
+    }
+}
+```
+
+Here's the module tree created by this:
+
+```bash
+crate
+ └── front_of_house
+     ├── hosting
+     │   ├── add_to_waitlist
+     │   └── seat_at_table
+     └── serving
+         ├── take_order
+         ├── serve_order
+         └── take_payment
+```
+
+You can use absolute or relative paths to navigate modules.
+
+Here's how we'd access a module function from a public method on our API (declared with `pub`):
+
+```rust
+pub fn eat_at_restaurant() {
+    // Absolute path
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // Relative path
+    front_of_house::hosting::add_to_waitlist();
+}
+```
+
+Should you use absolute or relative paths? The Rust book recommends absolute paths, since your function definitions and invocations are likely to be moved independently of each other (i.e. it makes sense to update the path when you move the definition, and not when you move the invocation).
+
+The above code won't compile, however, because of privacy! In Rust, all items are private by default, including structs, functions, modules, enums, and constants.
+
+Children can see their parents, but parents can't see their children. 
+
+You use the `pub` keyword to expose certain parts.
+
+To use `hosting::add_to_waitlist`, we need make both the `hosting` module public, AND the `add_to_waitlist` function.
+
+```rust
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // Absolute path
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // Relative path
+    front_of_house::hosting::add_to_waitlist();
+}
+```
+
+`eat_at_restaurant` can already see `front_of_house` since they're at the same level, but it can't see the _contents_ of `front_of_house` unless they are public. Similarly, we can access `hosting` but not its functions, unless they are public too.
+
+You can use the `super` keyword to go up a level in a relative path:
+
+```rust
+fn serve_order() {}
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::serve_order();
+    }
+
+    fn cook_order() {}
+}
+```
+
+Here's a great example of `pub` used with structs and their data:
+
+```rust
+mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &str) -> Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // Order a breakfast in the summer with Rye toast
+    let mut meal = back_of_house::Breakfast::summer("Rye");
+    // Change our mind about what bread we'd like
+    meal.toast = String::from("Wheat");
+    println!("I'd like {} toast please", meal.toast);
+
+    // The next line won't compile if we uncomment it; we're not allowed
+    // to see or modify the seasonal fruit that comes with the meal
+    // meal.seasonal_fruit = String::from("blueberries");
+}
+```
+
+The `Breakfast` struct has both private and public fields. By contrast, a public enum has all of its variants become public.
+
+```rust
+mod back_of_house {
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+
+pub fn eat_at_restaurant() {
+    let order1 = back_of_house::Appetizer::Soup;
+    let order2 = back_of_house::Appetizer::Salad;
+}
+```
+
+The idea here is that enums aren't useful unless all variants are public, whereas there are plenty of cases where structs should have a mix of public and private data.
+
+Imagine we're using the same module + submodules over and over. It might get annoying to write its path out. We can shorten our paths with `use`:
+
+```rust
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+}
+```
+
+You can also use relative paths like this. In this case, `use self::front_of_house::hosting;` would have the same effect.
+
+While you _could_ do `use crate::front_of_house::hosting::add_to_waitlist` and then just invoke `add_to_waitlist()`, that's bad practice, since then `add_to_waitlist` appears to be locally defined.
+
+The exception is with structs/enums, in which case you bring in the submodule:
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::new();
+    map.insert(1, 2);
+}
+```
+
+If two modules have the same name, you just stop at the parent:
+
+```rust
+use std::fmt;
+use std::io;
+
+fn function1() -> fmt::Result {
+    // --snip--
+}
+
+fn function2() -> io::Result<()> {
+    // --snip--
+}
+```
+
+You could also use the `as` keyword:
+
+```rust
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+fn function1() -> Result {
+    // --snip--
+}
+
+fn function2() -> IoResult<()> {
+    // --snip--
+}
+```
+
+You can also re-export modules by using `pub use`. In the below code, code that calls `eat_at_restaurant` can now also use `hosting::add_to_waitlist`:
+
+```rust
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+}
+```
+
+Doing so abstracts our API a bit. The consumer of `eat_at_restaurant` does not ever need to know about `front_of_house`; they just use `hosting::add_to_waitlist`. This makes sense if you use the customer-in-a-restaurant metaphor: they don't need to know about the front_of_house distinction.
+
+Here's how you import multiple submodules:
+
+```rust
+use std::{cmp::Ordering, io};
+```
+
+You can rewrite this:
+
+```rust
+use std::io;
+use std::io::Write;
+```
+
+as:
+
+```rust
+use std::io::{self, Write};
+```
+
+Or import all public submodules:
+
+```rust
+use std::collections::*;
+```
+
+... but you probably want to avoid that.
+
+When dividing up your module into different files, Rust can pick up the paths automatically. In your root file (either `src/lib.rs` or `src/main.rs`), the following code will automatically load `src/front_of_house.rs`:
+
+```rust
+mod front_of_house;
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+}
+```
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
