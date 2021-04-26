@@ -1113,7 +1113,128 @@ impl Rectangle {
 
 ... but since `square` does not receive `self` as an argument, it's not a method. It's called an associated function, and you invoke it via `Rectangle::square(3);`. It's like a class method in Ruby.
 
+# Enums
 
+Here's how you define an enum:
+
+```rust
+enum TacoType {
+    Fish,
+    Beef,
+}
+```
+
+You can then create instances of each variant:
+
+```rust
+let fish = TacoType::Fish;
+let beef = TacoType::Beef;
+```
+
+Both variants are of the same type, which means you can define a function that takes either:
+
+```rust
+fn place_taco_order(taco_type: TacoType) {
+
+}
+```
+
+You can combine enums with structs:
+
+```rust
+struct TacoRecipe {
+  type: TacoType,
+  name: String,
+}
+
+let tuna = TacoRecipe {
+  type: TacoType::Fish,
+  name: String::from("Tuna"),
+}
+```
+
+Or you can just bundle that data into the enum:
+
+```rust
+enum Taco {
+  Fish(String),
+  Beef(String),
+}
+
+let tuna = Taco::Fish(String::form("Tuna"));
+```
+
+You can even have different types for different enum values:
+
+```rust
+enum IpAddr {
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+
+let home = IpAddr::V4(127, 0, 0, 1);
+
+let loopback = IpAddr::V6(String::from("::1"));
+```
+
+Enums can also have methods:
+
+```rust
+enum Taco {
+  Fish(String),
+  Beef(String),
+}
+
+impl Taco {
+  fn order(&self) {
+
+  }
+}
+
+let taco = Taco::Fish(String::from("Tuna"));
+taco.order();
+```
+
+In `order()`, `&self` would thus be `Taco::Fish(String::from("Tuna"))`.
+
+A common enum type from the standard library is `Option`. Rust doesnt have a `null`. Instead, the `Option` type encodes the scenario of a value either being present or absent.
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+Here, `<T>` is the generic type parameter. Here's how you would use it (note you don't have to import `Option` or its variants!):
+
+```rust
+let some_number = Some(5);
+let some_string = Some("a string");
+
+let absent_number: Option<i32> = None;
+```
+
+The catch with `Option` values is that they can be null (that's the point!). But Rust forces you to always check if the value is null before you use it, as a safety mechanism.
+
+For example, this code fails because `y` is an `Option`:
+
+```rust
+let x: i8 = 5;
+let y: Option<i8> = Some(5);
+
+let sum = x + y;
+```
+
+In order for this to work, you need to convert `Option` to a definite type first. To do this, see [the documentation](https://doc.rust-lang.org/std/option/enum.Option.html).
+
+`unwrap()`, for example, returns the `Some` value of an `Option` type, but it's discouraged in the docs:
+
+> Returns the contained Some value, consuming the self value. Because this function may panic, its use is generally discouraged. Instead, prefer to use pattern matching and handle the None case explicitly, or call unwrap_or, unwrap_or_else, or unwrap_or_default.
+
+So you have to be able to handle the null case. This is where `match` comes in.
+
+## The `match` operator
 
 
 export default ({ children }) => (
