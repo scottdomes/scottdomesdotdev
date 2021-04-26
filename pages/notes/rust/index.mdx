@@ -1348,6 +1348,37 @@ match some_u8_value {
 
 ## If let
 
+Look at this match expression:
+
+```rust
+let some_u8_value = Some(0u8);
+match some_u8_value {
+    Some(3) => println!("three"),
+    _ => (),
+}
+```
+
+If `some_u8_value` is `Some(3)`, then we print. But we don't care about any other case: not any other `Some` value, or `None`.
+
+A more concise way to write it:
+
+```rust
+let some_u8_value = Some(0u8);
+if let Some(3) = some_u8_value {
+    println!("three");
+}
+```
+
+You can also add an else:
+
+```rust
+let some_u8_value = Some(0u8);
+if let Some(3) = some_u8_value {
+    println!("three");
+} else {
+    println!("not three");
+}
+```
 
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
