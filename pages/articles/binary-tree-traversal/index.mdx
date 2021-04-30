@@ -1,0 +1,49 @@
+import ArticleLayout from "components/articles/ArticleLayout";
+
+export const meta = {
+  title: "Mental models of tree traversal",
+  date: "2019-01-29T22:40:32.169Z",
+  description: "Binary trees, N-ary trees, preorder, postorder, inorder, all of it",
+};
+
+A common programming interview question is to ask you to traverse a tree. The tree might look something like this, and you're asked to go from node to node in a certain order.
+
+tree
+
+There are many variations on this question. It could be an n-ary tree or a binary tree (we'll discuss the difference). You could have to go through the nodes from top to bottom, or left to right. You could have to do preorder traversal, or postorder, or inorder... oh my.
+
+Don't fret. While there are many variations, with varying levels of difficulty, this question gets a lot simpler when you have the right mental model of how traversal should work. So that's the goal of this article: to give you a clear picture of how to approach traversal questions.
+
+Note that we'll try to approach this in a language-agnostic way; you should be able to apply this mental model to any programming language. For the purpose of examples, I'll alternate between Ruby and JavaScript.
+
+# Types of trees
+
+There are two main types of trees you'll encounter: binary and n-ary.
+
+## Binary trees
+
+Binary trees are composed of nodes that can have zero, one, or two children. No more than two children per node.
+
+The other rule pertains to _subtrees_. The left subtree of a given node, for example, includes its left child, and all its left child's children.
+
+DIAGRAM
+
+The right subtree of a node is its right child, and all the children of its right child.
+
+The rule is that the value of a given node must be _greater_ than any values in its left subtree, and _less_ than any value in its right subtree.
+
+DIAGRAM
+
+In the above diagram, focus in on the node 2. Its left subtree is composed of a single node, with the value of 1. That follows the rule, since 1 is less than 2.
+
+Its right child has the value of 4, and a child with the value of 3. Again, we're following the rule, since both 3 and 4 are greater than 2.
+
+So for any given node, you know that its children on the left side are all going to have smaller values than it, and all its children on the right side are going to have greater values.
+
+## N-ary trees
+
+
+
+export default ({ children }) => (
+  <ArticleLayout meta={meta}>{children}</ArticleLayout>
+);
