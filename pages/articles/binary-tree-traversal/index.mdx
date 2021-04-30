@@ -2,7 +2,7 @@ import ArticleLayout from "components/articles/ArticleLayout";
 
 export const meta = {
   title: "Mental models of tree traversal",
-  date: "2019-01-29T22:40:32.169Z",
+  date: "2021-04-30T22:40:32.169Z",
   description: "Binary trees, N-ary trees, preorder, postorder, inorder, all of it",
 };
 
@@ -68,9 +68,25 @@ Preorder traversal can apply to any type of N-ary tree (including binary). The r
 
 This process is much easier to make sense of with a visualization:
 
-DIAGRAM
+<BinaryTree />
 
 (The source code for these animations include the implementations of each type of traversal, in JavaScript. Note these are not the most efficient possible implementations; I focused on readability.)
+
+To implement this kind of traversal, the simplest approach is to use _recursion_.
+
+Here's the code for applying this to a binary tree:
+
+CODE
+
+We print out the value of the node, and then visit its left child, calling the same function from within itself. If that left child has a left child of its own, we'll call the function on that child; if not, we'll move on to the right child.
+
+For the above tree, here's a list of the function calls, in order:
+
+CODE 
+
+Here's the same approach applied to an N-ary tree. It's very similar, but we just don't know the number of children, so we iterate through all of them:
+
+CODE 
 
 
 

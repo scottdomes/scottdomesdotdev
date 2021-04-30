@@ -5,6 +5,7 @@ import WolframPattern from "components/articles/WolframPattern/Base";
 import BinaryWolframPattern from "components/articles/WolframPattern/Binary";
 import CustomWolframPattern from "components/articles/WolframPattern/Custom";
 import RuleDisplay from "components/articles/WolframPattern/RuleDisplay";
+import BinaryTree from "components/articles/BinaryTrees/BinaryTree";
 
 import { MDXProvider } from "@mdx-js/react";
 import Image from "next/image";
@@ -20,6 +21,7 @@ const ArticleLayout = ({ meta, children, noEmail = false }) => {
     BinaryWolframPattern,
     CustomWolframPattern,
     RuleDisplay,
+    BinaryTree,
   };
   return (
     <Layout title={meta.title}>
