@@ -70,7 +70,15 @@ This process is much easier to make sense of with a visualization:
 
 <BinaryTree tree={[1, null, 3, 2, 4, null, 5, 6]} traversalMethod="preorder" />
 
-(The source code for these animations include the implementations of each type of traversal, in JavaScript. Note these are not the most efficient possible implementations; I focused on readability.)
+(The source code for these animations include the implementations of each type of traversal, in JavaScript, using the Queue method explained in the "Methods" section below.)
+
+## Inorder traversal
+
+In preorder traversal, we visit the node, then its children from left to right. Inorder traversal puts the left children first. Let's see this first with a binary tree, where it's simpler:
+
+<BinaryTree tree={[1, null, 3, 2, 4, null, 5, 6]} traversalMethod="inorder" />
+
+
 
 To implement this kind of traversal, the simplest approach is to use _recursion_.
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import styles from "./BinaryTree.module.css";
 import NodeDisplay from "./NodeDisplay";
-import { preorderTraverse } from "./traversals";
+import { inorderTraverse, preorderTraverse } from "./traversals";
 import { convertTreeArrayToObject } from "./util";
 
 const TRAVERSALS = {
   preorder: preorderTraverse,
+  inorder: inorderTraverse
 };
 
 const BinaryTree = ({ tree, traversalMethod }) => {
@@ -38,7 +39,7 @@ const BinaryTree = ({ tree, traversalMethod }) => {
 
   return (
     <div className={styles.tree}>
-      <ul>
+      <ul className={styles.container}>
         <NodeDisplay node={treeAsObject.children[0]} nodesByVal={nodesByVal} />
       </ul>
       <button disabled={isPlaying} className={styles.button} onClick={replay}>

@@ -1,5 +1,9 @@
 @value triLight, triMid, triDark from "styles/colors.css";
 
+.container {
+  margin-top: 0;
+}
+
 /* Taken from http://jsfiddle.net/Limitlessisa/5Lhb0ron/ */
 .tree {
   width: 100%;
