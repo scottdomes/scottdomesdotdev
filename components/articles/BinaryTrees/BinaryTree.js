@@ -60,22 +60,34 @@ const BinaryTree = () => {
   const setVisited = (val, isVisited) => {
     console.log(val, isVisited, nodesByVal);
     setNodesByVal((state) => {
-      return { ...state, [val]: isVisited };;
+      return { ...state, [val]: isVisited };
     });
   };
 
   const preorderTraverse = async (node) => {
-    if (!node) {
-      return;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const queue = [node];
 
-    setVisited(node.val, true);
+    while (queue.length) {
+      const current = queue.pop();
 
-    node.children.forEach(async (child) => {
-      preorderTraverse(child);
+      if (!current) {
+        continue;
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+      setVisited(current.val, true);
+
+      current.children
+        .slice()
+        .reverse()
+        .forEach((child) => {
+          queue.push(child);
+        });
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setNodesByVal(valueMapping);
+    preorderTraverse(node);
   };
 
   useEffect(() => {
