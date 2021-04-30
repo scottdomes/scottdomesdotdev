@@ -103,7 +103,8 @@
 } */
 
 .tree li div:hover,
-.tree li div:hover + ul li div {
+.tree li div:hover + ul li div,
+.visited {
   background: #c8e4f8;
   color: #000;
   border: 1px solid #94a0b4;
@@ -111,6 +112,7 @@
 .tree li div:hover + ul li::after,
 .tree li div:hover + ul li::before,
 .tree li div:hover + ul::before,
-.tree li div:hover + ul ul::before {
+.tree li div:hover + ul ul::before,
+.visited {
   border-color: #94a0b4;
 }

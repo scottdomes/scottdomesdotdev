@@ -24,12 +24,11 @@ tree.forEach((node) => {
 });
 
 const NodeDisplay = ({ node, nodesByVal }) => {
+  const isVisited = nodesByVal[node.val];
   return (
     <li>
-      <div>
-        <span>
-          {node.val} {nodesByVal[node.val] && "V"}
-        </span>
+      <div className={isVisited ? styles.visited : ""}>
+        <span>{node.val}</span>
       </div>
       {node.children.length > 0 && (
         <ul>
