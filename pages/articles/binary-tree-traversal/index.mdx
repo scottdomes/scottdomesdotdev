@@ -42,6 +42,36 @@ So for any given node, you know that its children on the left side are all going
 
 ## N-ary trees
 
+In a binary tree, each node is limited to two children. With an N-ary tree, you can have different maximum numbers of children, depending on _N_.
+
+For example, a 3-ary tree (AKA ternary tree) means that each node can have a maximum of 3 children. A 156-ary tree means that each node can have up to 156 children.
+
+A binary tree is just a specific type of N-ary tree: a 2-ary tree. But they're very common in interview questions, so it's good to talk about them. One example question is converting an N-ary tree to a binary tree.
+
+# Traversal
+
+The basic definition of traversal is to visit each node in the tree once. How you do so, and in what order, depends on the question. Often, you'll be asked to keep track of each node you visited, in order, and have that be the solution.
+
+There are several types of traversal. Let's start with the simplest one: preorder traversal.
+
+## Preorder traversal
+
+Preorder traversal can apply to any type of N-ary tree (including binary). The rules are simple:
+
+- start with the top node of the tree
+- mark that first node as visited
+- visit its leftmost child
+- mark that node as visited
+- visit that node's leftmost child
+- mark that node as visited
+- repeat until all nodes are visited 
+
+This process is much easier to make sense of with a visualization:
+
+DIAGRAM
+
+(The source code for these animations include the implementations of each type of traversal, in JavaScript. Note these are not the most efficient possible implementations; I focused on readability.)
+
 
 
 export default ({ children }) => (
