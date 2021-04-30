@@ -58,27 +58,29 @@ const BinaryTree = () => {
   const [nodesByVal, setNodesByVal] = useState(valueMapping);
 
   const setVisited = (val, isVisited) => {
-    const copy = { ...nodesByVal, [val]: isVisited };
-    setNodesByVal(copy);
+    console.log(val, isVisited, nodesByVal);
+    setNodesByVal((state) => {
+      return { ...state, [val]: isVisited };;
+    });
   };
 
   const preorderTraverse = async (node) => {
     if (!node) {
       return;
     }
-
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setVisited(node.val, true);
 
-    node.children.forEach((child) => {
+    node.children.forEach(async (child) => {
       preorderTraverse(child);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     });
   };
 
   useEffect(() => {
-    // preorderTraverse(treeAsObject.children[0]);
-  })
+    preorderTraverse(treeAsObject.children[0]);
+  }, []);
 
   return (
     <div className={styles.tree}>
