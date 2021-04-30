@@ -1,4 +1,4 @@
-export const convertTreeArrayToObject = (tree) => {
+export const convertBinaryTreeArrayToObject = (tree) => {
   const treeAsObject = {
     children: [],
   };
@@ -9,11 +9,16 @@ export const convertTreeArrayToObject = (tree) => {
     if (node) {
       const object = {
         val: node,
-        children: [],
+        left: null,
+        right: null,
       };
       parents.push(object);
       const currentParent = parents[currentParentIndex];
-      currentParent.children.push(object);
+      if (currentParent.left) {
+        currentParent.right = object;
+      } else {
+        currentParent.left = object;
+      }
     } else {
       currentParentIndex++;
     }

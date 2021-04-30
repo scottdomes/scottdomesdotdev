@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
+import { convertBinaryTreeArrayToObject } from "./binary/util";
 import styles from "./BinaryTree.module.css";
 import NodeDisplay from "./NodeDisplay";
-import { inorderTraverse, preorderTraverse } from "./traversals";
-import { convertTreeArrayToObject } from "./util";
+import {
+  inorderTraverse,
+  postorderTraverse,
+  preorderTraverse,
+} from "./traversals";
+import { convertNaryTreeArrayToObject } from "./nary/util";
 
 const TRAVERSALS = {
   preorder: preorderTraverse,
-  inorder: inorderTraverse
+  inorder: inorderTraverse,
+  postorder: postorderTraverse,
 };
 
-const BinaryTree = ({ tree, traversalMethod }) => {
+const CONVERSIONS = {
+  binary: convertBinaryTreeArrayToObject,
+  nary: convertNaryTreeArrayToObject,
+};
+
+const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
   const valueMapping = {};
-  const treeAsObject = convertTreeArrayToObject(tree);
+  const treeAsObject = CONVERSIONS[treeType](tree);
+  const initialNode =
+    treeType === "binary" ? treeAsObject.left : treeAsObject.children[0];
+  console.log(treeAsObject);
   tree.forEach((node) => {
     if (node) {
       valueMapping[node] = false;
@@ -28,7 +42,7 @@ const BinaryTree = ({ tree, traversalMethod }) => {
 
   const traverse = async () => {
     setPlaying(true);
-    await TRAVERSALS[traversalMethod](treeAsObject.children[0], setVisited);
+    await TRAVERSALS[traversalMethod](initialNode, setVisited);
     setPlaying(false);
   };
 
@@ -40,7 +54,7 @@ const BinaryTree = ({ tree, traversalMethod }) => {
   return (
     <div className={styles.tree}>
       <ul className={styles.container}>
-        <NodeDisplay node={treeAsObject.children[0]} nodesByVal={nodesByVal} />
+        <NodeDisplay node={initialNode} nodesByVal={nodesByVal} />
       </ul>
       <button disabled={isPlaying} className={styles.button} onClick={replay}>
         Play

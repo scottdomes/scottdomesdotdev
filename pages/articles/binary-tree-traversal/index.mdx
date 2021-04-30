@@ -84,7 +84,30 @@ And one more:
 
 In preorder traversal, we visit the node, then its children from left to right. With inorder traversal, we instead start with the left children first. Let's see this first with a binary tree, where it's simpler:
 
-<BinaryTree tree={[1, null, 3, 2, 4, null, 5, 6]} traversalMethod="inorder" />
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="inorder" />
+
+A more complex one:
+
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="inorder" />
+
+And one more:
+
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="inorder" />
+
+## Postorder traversal
+
+Postorder is the reverse of preorder: in postorder, we visit all children before the parent.
+
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="postorder" />
+
+A more complex one:
+
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="postorder" />
+
+And one more:
+
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="postorder" />
+
 
 To implement this kind of traversal, the simplest approach is to use _recursion_.
 
