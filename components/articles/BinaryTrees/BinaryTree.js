@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./BinaryTree.module.css";
 
 const tree = [1, null, 3, 2, 4, null, 5, 6];
@@ -27,7 +27,9 @@ const NodeDisplay = ({ node, nodesByVal }) => {
   return (
     <li>
       <div>
-        <span>{node.val}</span>
+        <span>
+          {node.val} {nodesByVal[node.val] && "V"}
+        </span>
       </div>
       {node.children.length > 0 && (
         <ul>
@@ -50,7 +52,7 @@ const BinaryTree = () => {
   const valueMapping = {};
   tree.forEach((node) => {
     if (node) {
-      valueMapping[node] = true;
+      valueMapping[node] = false;
     }
   });
   const [nodesByVal, setNodesByVal] = useState(valueMapping);
@@ -59,6 +61,24 @@ const BinaryTree = () => {
     const copy = { ...nodesByVal, [val]: isVisited };
     setNodesByVal(copy);
   };
+
+  const preorderTraverse = async (node) => {
+    if (!node) {
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setVisited(node.val, true);
+
+    node.children.forEach((child) => {
+      preorderTraverse(child);
+    });
+  };
+
+  useEffect(() => {
+    // preorderTraverse(treeAsObject.children[0]);
+  })
 
   return (
     <div className={styles.tree}>
