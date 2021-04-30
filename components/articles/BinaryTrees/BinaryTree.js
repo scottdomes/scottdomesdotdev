@@ -8,12 +8,26 @@ import {
   preorderTraverse,
 } from "./traversals";
 import { convertNaryTreeArrayToObject } from "./nary/util";
+import {
+  binaryInOrderTraverse,
+  binaryPostorderTraverse,
+  binaryPreorderTraverse,
+} from "./binary/traversals";
 
 const TRAVERSALS = {
-  preorder: preorderTraverse,
-  inorder: inorderTraverse,
-  postorder: postorderTraverse,
+  binary: {
+    preorder: binaryPreorderTraverse,
+    inorder: binaryInOrderTraverse,
+    postorder: binaryPostorderTraverse,
+  },
+  nary: {
+    preorder: preorderTraverse,
+    inorder: inorderTraverse,
+    postorder: postorderTraverse,
+  },
 };
+
+const PAUSE_DURATION = 700;
 
 const CONVERSIONS = {
   binary: convertBinaryTreeArrayToObject,
@@ -34,15 +48,21 @@ const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
   const [nodesByVal, setNodesByVal] = useState(valueMapping);
   const [isPlaying, setPlaying] = useState(false);
 
+  const visitOrder = TRAVERSALS[treeType].preorder(initialNode); // TRAVERSALS[treeType][traversalMethod](initialNode);
+
   const setVisited = (val, isVisited) => {
     setNodesByVal((state) => {
       return { ...state, [val]: isVisited };
     });
   };
 
+  console.log(visitOrder);
   const traverse = async () => {
     setPlaying(true);
-    await TRAVERSALS[traversalMethod](initialNode, setVisited);
+    for (const node of visitOrder) {
+      await new Promise((resolve) => setTimeout(resolve, PAUSE_DURATION));
+      setVisited(node, true);
+    }
     setPlaying(false);
   };
 
