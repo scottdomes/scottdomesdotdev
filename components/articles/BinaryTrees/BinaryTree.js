@@ -10,13 +10,14 @@ const TRAVERSALS = {
 
 const BinaryTree = ({ tree, traversalMethod }) => {
   const valueMapping = {};
-  const treeAsObject = convertTreeArrayToObject(tree)
+  const treeAsObject = convertTreeArrayToObject(tree);
   tree.forEach((node) => {
     if (node) {
       valueMapping[node] = false;
     }
   });
   const [nodesByVal, setNodesByVal] = useState(valueMapping);
+  const [isPlaying, setPlaying] = useState(false);
 
   const setVisited = (val, isVisited) => {
     setNodesByVal((state) => {
@@ -25,21 +26,24 @@ const BinaryTree = ({ tree, traversalMethod }) => {
   };
 
   const traverse = async () => {
-    TRAVERSALS[traversalMethod](treeAsObject.children[0], setVisited);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setNodesByVal(valueMapping);
-    TRAVERSALS[traversalMethod](treeAsObject.children[0], setVisited);
+    setPlaying(true);
+    await TRAVERSALS[traversalMethod](treeAsObject.children[0], setVisited);
+    setPlaying(false);
   };
 
-  useEffect(() => {
+  const replay = () => {
+    setNodesByVal(valueMapping);
     traverse();
-  }, []);
+  };
 
   return (
     <div className={styles.tree}>
       <ul>
         <NodeDisplay node={treeAsObject.children[0]} nodesByVal={nodesByVal} />
       </ul>
+      <button disabled={isPlaying} className={styles.button} onClick={replay}>
+        Play
+      </button>
     </div>
   );
 };

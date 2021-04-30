@@ -18,4 +18,6 @@ export const convertTreeArrayToObject = (tree) => {
       currentParentIndex++;
     }
   });
+
+  return treeAsObject;
 };

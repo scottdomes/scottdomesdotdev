@@ -1,3 +1,5 @@
+const PAUSE_DURATION = 700;
+
 export const preorderTraverse = async (node, setVisited) => {
   const queue = [node];
 
@@ -8,7 +10,7 @@ export const preorderTraverse = async (node, setVisited) => {
       continue;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, PAUSE_DURATION));
     setVisited(current.val, true);
 
     current.children
