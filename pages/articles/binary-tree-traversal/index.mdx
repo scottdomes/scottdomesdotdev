@@ -68,13 +68,15 @@ Preorder traversal can apply to any type of N-ary tree (including binary). The r
 
 This process is much easier to make sense of with a visualization. Let's start with a simple example:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="preorder" />
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="preorder" />
 
 A more complex one:
 
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="preorder" />
+
+And one more:
+
 <BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="preorder" />
-
-
 
 (The source code for these animations include the implementations of each type of traversal, in JavaScript, using the Queue method explained in the "Methods" section below.)
 
