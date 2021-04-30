@@ -1,15 +1,9 @@
-const PAUSE_DURATION = 700;
-
 export const binaryPreorderTraverse = (node) => {
   const queue = [node];
   const output = [];
 
   while (queue.length) {
     const current = queue.pop();
-
-    if (!current) {
-      continue;
-    }
 
     output.push(current.val);
 
@@ -25,39 +19,40 @@ export const binaryPreorderTraverse = (node) => {
   return output;
 };
 
-export const binaryInOrderTraverse = async (node, setVisited) => {
-  const queue = [];
-  let current = node;
+export const binaryInOrderTraverse = (node) => {
+  const queue = [node];
+  const output = [];
+  let currentNode = node.left;
 
-  while (current || queue.length) {
-    if (current) {
-      queue.push(current);
-      current = current.left;
+  while (currentNode || queue.length) {
+    if (currentNode) {
+      queue.push(currentNode);
+      currentNode = currentNode.left;
     } else {
-      current = queue.pop();
-      await new Promise((resolve) => setTimeout(resolve, PAUSE_DURATION));
-      setVisited(current.val, true);
-
-      current = current.right;
+      currentNode = queue.pop();
+      output.push(currentNode.val);
+      currentNode = currentNode.right;
     }
   }
+
+  return output;
 };
 
-export const binaryPostorderTraverse = async (node, setVisited) => {
+export const binaryPostorderTraverse = (node) => {
   const queue = [node];
+  const output = [];
 
   while (queue.length) {
-    const current = queue.shift();
+    const current = queue.pop();
 
-    await new Promise((resolve) => setTimeout(resolve, PAUSE_DURATION));
-    setVisited(current.val, true);
-
+    output.unshift(current.val);
     if (current.left) {
-      queue.push(current);
       queue.push(current.left);
     }
     if (current.right) {
       queue.push(current.right);
     }
   }
+
+  return output;
 };

@@ -39,8 +39,8 @@ const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
   const treeAsObject = CONVERSIONS[treeType](tree);
   const initialNode =
     treeType === "binary" ? treeAsObject.left : treeAsObject.children[0];
-  console.log(treeAsObject);
-  tree.forEach((node) => {
+
+    tree.forEach((node) => {
     if (node) {
       valueMapping[node] = false;
     }
@@ -48,7 +48,9 @@ const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
   const [nodesByVal, setNodesByVal] = useState(valueMapping);
   const [isPlaying, setPlaying] = useState(false);
 
-  const visitOrder = TRAVERSALS[treeType].preorder(initialNode); // TRAVERSALS[treeType][traversalMethod](initialNode);
+  const visitOrder = TRAVERSALS[treeType][traversalMethod](initialNode);
+
+  console.log(traversalMethod, visitOrder);
 
   const setVisited = (val, isVisited) => {
     setNodesByVal((state) => {
@@ -56,7 +58,6 @@ const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
     });
   };
 
-  console.log(visitOrder);
   const traverse = async () => {
     setPlaying(true);
     for (const node of visitOrder) {
