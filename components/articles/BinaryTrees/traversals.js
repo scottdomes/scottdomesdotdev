@@ -29,22 +29,22 @@ export const inorderTraverse = async (node, setVisited) => {
   while (current || queue.length) {
     while (current) {
       queue.push(current);
+      const leftChildren = current.children.slice(
+        0,
+        current.children.length - 1
+      );
+      leftChildren.forEach((child) => {
+        queue.push(child);
+      });
       current = current.children[0];
     }
 
     current = queue.pop();
+
     await new Promise((resolve) => setTimeout(resolve, PAUSE_DURATION));
 
     setVisited(current.val, true);
 
     current = current.children.slice(-1)[0];
-    // const childrenCopy = current.children.slice().reverse();
-    // const lastChild = childrenCopy.pop();
-
-    // childrenCopy.forEach((child) => {
-    //   queue.push(child);
-    // });
-
-    // queue.push(lastChild);
   }
 };

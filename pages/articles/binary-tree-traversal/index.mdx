@@ -66,19 +66,23 @@ Preorder traversal can apply to any type of N-ary tree (including binary). The r
 - mark that node as visited
 - repeat until all nodes are visited 
 
-This process is much easier to make sense of with a visualization:
+This process is much easier to make sense of with a visualization. Let's start with a simple example:
 
-<BinaryTree tree={[1, null, 3, 2, 4, null, 5, 6]} traversalMethod="preorder" />
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="preorder" />
+
+A more complex one:
+
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="preorder" />
+
+
 
 (The source code for these animations include the implementations of each type of traversal, in JavaScript, using the Queue method explained in the "Methods" section below.)
 
 ## Inorder traversal
 
-In preorder traversal, we visit the node, then its children from left to right. Inorder traversal puts the left children first. Let's see this first with a binary tree, where it's simpler:
+In preorder traversal, we visit the node, then its children from left to right. With inorder traversal, we instead start with the left children first. Let's see this first with a binary tree, where it's simpler:
 
 <BinaryTree tree={[1, null, 3, 2, 4, null, 5, 6]} traversalMethod="inorder" />
-
-
 
 To implement this kind of traversal, the simplest approach is to use _recursion_.
 
