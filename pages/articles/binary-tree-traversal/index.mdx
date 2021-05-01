@@ -154,12 +154,12 @@ Here's another explanation, using the below tree as an example:
 
 For this tree, the function calls will be:
 
-1. `preorderTraverse` calls `traverse` with root node. 
+1. `preorderTraverse` calls `traverse` with root node.
 2. `traverse` push Node 1 into `output`, and calls `traverse` with its left child (Node 2).
 3. `traverse` pushes Node 2 into `output`. Since Node 2 has no children, nothing else happens.
 4. `traverse` calls `traverse` on Node 1's right child (Node 3).
 5. `traverse` pushes Node 3 into `output`. Since Node 3 has no children, nothing else happens.
-6. `preorderTraverse` returns `output`. 
+6. `preorderTraverse` returns `output`.
 
 The function calls, in order, with the node arguments:
 
@@ -189,7 +189,7 @@ Here are the function calls:
 One more way to look at it, in terms of nodes visited:
 
 1. Node 1
-2. Left child of Node 1 
+2. Left child of Node 1
 3. Left child of Node 2
 4. Right child of Node 2
 5. Right child of Node 1
@@ -198,8 +198,107 @@ One more way to look at it, in terms of nodes visited:
 
 Recursion can be confusing, but the end result should make sense: we visit each node, then its left child + its left child's children, then its right child + its right child's children.
 
-The advantage of recursion is that it's short and easy to write, and may be a little more intuitive than the other method of traversal: the stack. But the stack is much more efficient, so let's take a look at how we'd implement it for preorder traversal.
+The advantage of recursion is that it's short and easy to write, and may be a little more intuitive than the other method of traversal: iteration. But iteration is much more efficient, so let's take a look at how we'd implement it for preorder traversal.
 
+#### Solving binary preorder traversal with iteration
+
+The basis of iteration is that as we navigate the tree, we make a continually evolving list of nodes to visit.
+
+The reason it is more efficient is that recursive function calls (calling functions within fuctions within functions) takes up space in memory (the "call stack"). If we're deep within a 1,000 node tree, we have a huge amount of context to store in memory for a given function call. More nodes, slower execution.
+
+Iteration is more efficient because at any one time, we only store the next few nodes to visit. There's no recursion, so no filling up the call stack. Let's see it in practice to better understand how this works.
+
+(By the way, the following code is literally powering the examples you see in this article.)
+
+```js
+function traverse(queue, output) {
+  const current = queue.pop();
+
+  output.push(current.val);
+
+  if (current.right) {
+    queue.push(current.right);
+  }
+
+  if (current.left) {
+    queue.push(current.left);
+  }
+}
+
+function preorderTraverse(node) {
+  const queue = [node];
+  const output = [];
+
+  while (queue.length) {
+    traverse(queue, output);
+  }
+
+  return output;
+}
+```
+
+The structure here is similar. We have a `preorderTraverse`, which creates and returns an `output` array, containing a list of the nodes we visit, in order. But now, we have another array called `queue`.
+
+The purpose of `queue` is to store the next few nodes we want to visit. Here's our approach:
+
+1. As long as `queue` contains items, we call `traverse` over and over, passing the queue. At the start, it only contains the root node. 
+2. `traverse` takes the _last_ item out of the queue (I'll explain why in a second) and pushes it into `output`, marking it as visited. If that node has a right child, we push it into the queue. If it has a left child, we push it in as well.
+3. The first execution of `traverse` ends, but since the queue now has _two_ items (the left and right child of the right node), it gets called again by the `while` loop.
+4. This time, the last item in the queue is Node1's left child (since it was pushed second). We look for its children, and push them into the queue.
+5. The process repeats until we've visited every item in the tree. 
+
+Let's look at what happens with the below tree:
+
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="preorder" />
+
+For this tree, the function calls will be:
+
+1. `preorderTraverse` calls `traverse` with root node in queue.
+2. `traverse` takes Node 1 out of the queue and pushes it into `output`, then pushes its right child (Node 3) and its left child (Node 2) into the queue.
+3. Since the queue length is now 2, the `while` loop in `preorderTraverse` calls `traverse` again.
+4. `traverse` takes Node 2 out of the queue and pushes it into `output`. Since it has no children, nothing else happens.
+5. Since the queue length is 1, the `while` loop in `preorderTraverse` calls `traverse` again.
+6. `traverse` takes Node 3 out of the queue and pushes it into `output`. Since it has no children, nothing else happens.
+7. The queue length is now 0. `preorderTraverse` returns `output`.
+
+Here's the function calls, showing what's happening in the queue:
+
+1. `preorderTraverse` is called with the root node (Node 1).
+2. `traverse([Node1])` is called from `preorderTraverse`.
+3. `traverse([Node3, Node2])` is called from `preorderTraverse`.
+4. `traverse([Node3])` is called from `preorderTraverse`.
+
+A note on queue ordering: we actually want to visit the left child _first_, before the right, so we push it second and then use `pop` to take the last item from the queue each time. You could accomplish the same thing by pushing the left child in the queue first, then using `shift` instead of `pop` to take the first item in the array. But it's less efficient to use `shift`, since that requires moving every item in memory over one index. 
+
+Let's do one more example.
+
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="preorder"
+/>
+
+Here are the function calls:
+
+1. `preorderTraverse(Node1)`.
+2. `traverse([Node1])` is called from the `while` loop (all following calls are from the loop).
+3. `traverse([Node3, Node2])` is called.
+4. `traverse([Node3, Node5, Node4])` is called.
+5. `traverse([Node3, Node5])` is called.
+6. `traverse([Node3])` is called.
+7. `traverse([Node7, Node6])` is called.
+8. `traverse([Node7])` is called.
+
+Which yields us the same order of nodes visited as recursion:
+
+1. Node 1
+2. Left child of Node 1
+3. Left child of Node 2
+4. Right child of Node 2
+5. Right child of Node 1
+6. Left child of Node 3
+7. Right child of Node 3
+
+Take your time to really understand both recursion and iteration in the above examples. The other forms of traversal are slightly different, but follow the same principles, so we'll start moving a bit faster.
 
 ## Inorder traversal
 
