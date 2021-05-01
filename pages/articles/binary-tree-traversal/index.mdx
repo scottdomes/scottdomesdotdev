@@ -3,7 +3,8 @@ import ArticleLayout from "components/articles/ArticleLayout";
 export const meta = {
   title: "Mental models of tree traversal",
   date: "2021-04-30T22:40:32.169Z",
-  description: "Binary trees, N-ary trees, preorder, postorder, inorder, all of it",
+  description:
+    "Binary trees, N-ary trees, preorder, postorder, inorder, all of it",
 };
 
 A common programming interview question is to ask you to traverse a tree. The tree might look something like this, and you're asked to go from node to node in a certain order.
@@ -24,21 +25,17 @@ There are two main types of trees you'll encounter: binary and n-ary.
 
 Binary trees are composed of nodes that can have zero, one, or two children. No more than two children per node.
 
-The other rule pertains to _subtrees_. The left subtree of a given node, for example, includes its left child, and all its left child's children.
+Here's a simple example:
 
-DIAGRAM
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="preorder" hidePlayButton />
 
-The right subtree of a node is its right child, and all the children of its right child.
+Another one:
 
-The rule is that the value of a given node must be _greater_ than any values in its left subtree, and _less_ than any value in its right subtree.
+<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6]} traversalMethod="preorder" hidePlayButton />
 
-DIAGRAM
+**Binary trees are made up of nodes with 0, 1, or 2 children.**
 
-In the above diagram, focus in on the node 2. Its left subtree is composed of a single node, with the value of 1. That follows the rule, since 1 is less than 2.
-
-Its right child has the value of 4, and a child with the value of 3. Again, we're following the rule, since both 3 and 4 are greater than 2.
-
-So for any given node, you know that its children on the left side are all going to have smaller values than it, and all its children on the right side are going to have greater values.
+You may have also heard of binary _search_ trees, which are a subtype of binary trees, which specific rules for the order in which the numbers appear. You may see programming challenges involving binary search trees, but they're a little more complex, so we'll ignore them for now.
 
 ## N-ary trees
 
@@ -46,25 +43,35 @@ In a binary tree, each node is limited to two children. With an N-ary tree, you 
 
 For example, a 3-ary tree (AKA ternary tree) means that each node can have a maximum of 3 children. A 156-ary tree means that each node can have up to 156 children.
 
-A binary tree is just a specific type of N-ary tree: a 2-ary tree. But they're very common in interview questions, so it's good to talk about them. One example question is converting an N-ary tree to a binary tree.
+Here's a N-ary tree where N is 4:
+
+<BinaryTree tree={[1, null, 2, 3, 4, 5, null, 6, 7, null, 8]} treeType="nary" traversalMethod="preorder" hidePlayButton />
+
+**N-ary trees are made up of nodes with up to N children.**
+
+A binary tree is really just a specific type of N-ary tree: a 2-ary tree. But they're very common in interview questions, so it's good to talk about them. You may encounter challenges involving both binary and n-ary trees, but binary is the most popular type.
 
 # Traversal
 
-The basic definition of traversal is to visit each node in the tree once. How you do so, and in what order, depends on the question. Often, you'll be asked to keep track of each node you visited, in order, and have that be the solution.
+The basic definition of traversal is to visit each node in the tree once. How you do so, and in what order, depends on the question. Often, you'll be asked to keep track of each node you visited, in order, and give that as your solution.
 
-There are several types of traversal. Let's start with the simplest one: preorder traversal.
+There are several types of traversal. For this article, we're going to focus on the three most common: **preorder, inorder, and postorder.**
 
-## Preorder traversal
+For each type, I'm going to explain how it works for a binary tree, and then show you the implementation. After we go through each type with the binary tree, I'll repeat the process with N-ary tree. Binary trees are easier to navigate and understand, so I think this will help you get the hang of it faster.
 
-Preorder traversal can apply to any type of N-ary tree (including binary). The rules are simple:
+## Binary tree traversal
 
-- start with the top node of the tree
-- mark that first node as visited
-- visit its leftmost child
-- mark that node as visited
-- visit that node's leftmost child
-- mark that node as visited
-- repeat until all nodes are visited 
+### Preorder traversal of a binary tree
+
+Preorder traversal follows a simple process for visiting each node in the tree. Remember most challenges will ask you to return an array representing the order in which you visited the nodes; for each node we "visit", imagine pushing its value into an array, and then returning that.
+
+Here's the process for preorder traversal:
+
+1. Visit the first node (Node 1) in the tree, and push it into our output array
+2. Visit the left child of Node 1 (Node 2), and push it into our output array
+3. If Node 2 has a left child, we visit it, and push it into our output array; otherwise, we go to the right node of Node 1 (Node 3)
+
+For each node, the process is: visit node, visit left child, visit right child.
 
 This process is much easier to make sense of with a visualization. Let's start with a simple example:
 
@@ -72,11 +79,17 @@ This process is much easier to make sense of with a visualization. Let's start w
 
 A more complex one:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="preorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="preorder"
+/>
 
 And one more:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="preorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]}
+  traversalMethod="preorder"
+/>
 
 (The source code for these animations include the implementations of each type of traversal, in JavaScript, using the Queue method explained in the "Methods" section below.)
 
@@ -88,11 +101,17 @@ In preorder traversal, we visit the node, then its children from left to right. 
 
 A more complex one:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="inorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="inorder"
+/>
 
 And one more:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="inorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]}
+  traversalMethod="inorder"
+/>
 
 ## Postorder traversal
 
@@ -102,30 +121,55 @@ Postorder is the reverse of preorder: in postorder, we visit all children before
 
 A more complex one:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]} traversalMethod="postorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="postorder"
+/>
 
 And one more:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="postorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]}
+  traversalMethod="postorder"
+/>
 
 # N-ary tree
 
 ## N-ary preorder traversal
 
-<BinaryTree tree={[1, null, 2, 3, 4, 5]} treeType="nary" traversalMethod="preorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, 4, 5]}
+  treeType="nary"
+  traversalMethod="preorder"
+/>
 
 ## N-ary inorder traversal
 
-<BinaryTree tree={[1, null, 2, 3, 4, 5]} treeType="nary" traversalMethod="inorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, 4, 5]}
+  treeType="nary"
+  traversalMethod="inorder"
+/>
 
-<BinaryTree tree={[1, null, 2, 3, 4, 5, null, 6, 7]} treeType="nary" traversalMethod="inorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, 4, 5, null, 6, 7]}
+  treeType="nary"
+  traversalMethod="inorder"
+/>
 
 ## N-ary postorder traversal
 
-<BinaryTree tree={[1, null, 2, 3, 4, 5]} treeType="nary" traversalMethod="postorder" />
+<BinaryTree
+  tree={[1, null, 2, 3, 4, 5]}
+  treeType="nary"
+  traversalMethod="postorder"
+/>
 
-<BinaryTree tree={[1, null, 2, 3, 4, 5, null, 6, 7]} treeType="nary" traversalMethod="postorder" />
-
+<BinaryTree
+  tree={[1, null, 2, 3, 4, 5, null, 6, 7]}
+  treeType="nary"
+  traversalMethod="postorder"
+/>
 
 To implement this kind of traversal, the simplest approach is to use _recursion_.
 
@@ -137,14 +181,14 @@ We print out the value of the node, and then visit its left child, calling the s
 
 For the above tree, here's a list of the function calls, in order:
 
-CODE 
+CODE
 
 Here's the same approach applied to an N-ary tree. It's very similar, but we just don't know the number of children, so we iterate through all of them:
 
-CODE 
-
-
+CODE
 
 export default ({ children }) => (
   <ArticleLayout meta={meta}>{children}</ArticleLayout>
 );
+
+;

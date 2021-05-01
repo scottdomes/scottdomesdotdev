@@ -34,13 +34,18 @@ const CONVERSIONS = {
   nary: convertNaryTreeArrayToObject,
 };
 
-const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
+const BinaryTree = ({
+  tree,
+  traversalMethod,
+  treeType = "binary",
+  hidePlayButton,
+}) => {
   const valueMapping = {};
   const treeAsObject = CONVERSIONS[treeType](tree);
   const initialNode =
     treeType === "binary" ? treeAsObject.left : treeAsObject.children[0];
 
-    tree.forEach((node) => {
+  tree.forEach((node) => {
     if (node) {
       valueMapping[node] = false;
     }
@@ -75,9 +80,11 @@ const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
       <ul className={styles.container}>
         <NodeDisplay node={initialNode} nodesByVal={nodesByVal} />
       </ul>
-      <button disabled={isPlaying} className={styles.button} onClick={replay}>
-        Play
-      </button>
+      {!hidePlayButton && (
+        <button disabled={isPlaying} className={styles.button} onClick={replay}>
+          Play
+        </button>
+      )}
     </div>
   );
 };
