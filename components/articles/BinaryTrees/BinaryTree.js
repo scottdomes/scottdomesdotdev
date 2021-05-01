@@ -6,7 +6,7 @@ import {
   inorderTraverse,
   postorderTraverse,
   preorderTraverse,
-} from "./traversals";
+} from "./nary/traversals";
 import { convertNaryTreeArrayToObject } from "./nary/util";
 import {
   binaryInOrderTraverse,
@@ -49,8 +49,6 @@ const BinaryTree = ({ tree, traversalMethod, treeType = "binary" }) => {
   const [isPlaying, setPlaying] = useState(false);
 
   const visitOrder = TRAVERSALS[treeType][traversalMethod](initialNode);
-
-  console.log(traversalMethod, visitOrder);
 
   const setVisited = (val, isVisited) => {
     setNodesByVal((state) => {

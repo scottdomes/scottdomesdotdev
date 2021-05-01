@@ -46,6 +46,7 @@ export const binaryPostorderTraverse = (node) => {
     const current = queue.pop();
 
     output.unshift(current.val);
+    
     if (current.left) {
       queue.push(current.left);
     }

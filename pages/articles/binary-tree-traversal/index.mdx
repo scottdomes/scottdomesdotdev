@@ -108,6 +108,24 @@ And one more:
 
 <BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]} traversalMethod="postorder" />
 
+# N-ary tree
+
+## N-ary preorder traversal
+
+<BinaryTree tree={[1, null, 2, 3, 4, 5]} treeType="nary" traversalMethod="preorder" />
+
+## N-ary inorder traversal
+
+<BinaryTree tree={[1, null, 2, 3, 4, 5]} treeType="nary" traversalMethod="inorder" />
+
+<BinaryTree tree={[1, null, 2, 3, 4, 5, null, 6, 7]} treeType="nary" traversalMethod="inorder" />
+
+## N-ary postorder traversal
+
+<BinaryTree tree={[1, null, 2, 3, 4, 5]} treeType="nary" traversalMethod="postorder" />
+
+<BinaryTree tree={[1, null, 2, 3, 4, 5, null, 6, 7]} treeType="nary" traversalMethod="postorder" />
+
 
 To implement this kind of traversal, the simplest approach is to use _recursion_.
 
