@@ -31,7 +31,11 @@ Here's a simple example:
 
 Another one:
 
-<BinaryTree tree={[1, null, 2, 3, null, 4, 5, null, 6]} traversalMethod="preorder" hidePlayButton />
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6]}
+  traversalMethod="preorder"
+  hidePlayButton
+/>
 
 **Binary trees are made up of nodes with 0, 1, or 2 children.**
 
@@ -45,7 +49,12 @@ For example, a 3-ary tree (AKA ternary tree) means that each node can have a max
 
 Here's a N-ary tree where N is 4:
 
-<BinaryTree tree={[1, null, 2, 3, 4, 5, null, 6, 7, null, 8]} treeType="nary" traversalMethod="preorder" hidePlayButton />
+<BinaryTree
+  tree={[1, null, 2, 3, 4, 5, null, 6, 7, null, 8]}
+  treeType="nary"
+  traversalMethod="preorder"
+  hidePlayButton
+/>
 
 **N-ary trees are made up of nodes with up to N children.**
 
@@ -93,13 +102,104 @@ And one more:
 
 ### Implementing binary preorder traversal
 
-All tree traversal solutions are pretty similar, so this section will be the longest one, but once you get the hang of it, the rest will make a lot more sense. 
+All tree traversal solutions are pretty similar, so this section will be the longest one, but once you get the hang of it, the rest will make a lot more sense.
 
 There are two main ways to solve this problem: through _recursion_ or through using a _stack_.
 
 Let's start with recursion, and talk about what that means.
 
 #### Solving binary preorder traversal with recursion
+
+Recursion means calling the same function from within itself. Again, this is easier to understand with an example. Here's a code sample of our two functions, one of which is recursive:
+
+```js
+function traverse(node, output) {
+  output.push(node.val);
+
+  if (node.left) {
+    traverse(node.left, output);
+  }
+
+  if (node.right) {
+    traverse(node.right, output);
+  }
+}
+
+function preorderTraverse(root) {
+  const output: number[] = [];
+
+  traverse(root, output);
+
+  return output;
+}
+```
+
+Let's walk through what's happening here, step by step.
+
+First, in `preorderTraverse` (the second function):
+
+1. We create an array called `output`. This is our solution, and will contain a list of nodes visited, in order.
+2. We call our `traverse` function, passing in the root node and `output`. This function will visit nodes in order, and push each one into the `output` array.
+3. We return the array.
+
+In `traverse`, here's what happens:
+
+1. We push the current node into the ouput array, which tracks the fact that we visited it.
+2. If the node has a child to the left, we call `traverse` on it.
+3. If that left child also has left children, that will spawn more calls to `traverse`. Eventually, though, that chain will end, and now we call `traverse` on the right child of the original node.
+
+Here's another explanation, using the below tree as an example:
+
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="preorder" />
+
+For this tree, the function calls will be:
+
+1. `preorderTraverse` calls `traverse` with root node. 
+2. `traverse` push Node 1 into `output`, and calls `traverse` with its left child (Node 2).
+3. `traverse` pushes Node 2 into `output`. Since Node 2 has no children, nothing else happens.
+4. `traverse` calls `traverse` on Node 1's right child (Node 3).
+5. `traverse` pushes Node 3 into `output`. Since Node 3 has no children, nothing else happens.
+6. `preorderTraverse` returns `output`. 
+
+The function calls, in order, with the node arguments:
+
+1. `preorderTraverse` is called with the root node (Node 1).
+2. `traverse(Node1)` is called from `preorderTraverse`.
+3. `traverse(Node2)` is called from `traverse(Node1)`.
+4. `traverse(Node3)` is called from `traverse(Node1)`.
+
+Let's do one more example.
+
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="preorder"
+/>
+
+Here are the function calls:
+
+1. `preorderTraverse(Node1)`.
+2. `traverse(Node1)` is called from `preorderTraverse(Node1)`.
+3. `traverse(Node2)` is called from `traverse(Node1)`.
+4. `traverse(Node4)` is called from `traverse(Node2)`
+5. `traverse(Node5)` is called from `traverse(Node2)`
+6. `traverse(Node3)` is called from `traverse(Node1)`.
+7. `traverse(Node6)` is called from `traverse(Node3)`.
+8. `traverse(Node7)` is called from `traverse(Node3)`.
+
+One more way to look at it, in terms of nodes visited:
+
+1. Node 1
+2. Left child of Node 1 
+3. Left child of Node 2
+4. Right child of Node 2
+5. Right child of Node 1
+6. Left child of Node 3
+7. Right child of Node 3
+
+Recursion can be confusing, but the end result should make sense: we visit each node, then its left child + its left child's children, then its right child + its right child's children.
+
+The advantage of recursion is that it's short and easy to write, and may be a little more intuitive than the other method of traversal: the stack. But the stack is much more efficient, so let's take a look at how we'd implement it for preorder traversal.
+
 
 ## Inorder traversal
 
