@@ -241,11 +241,11 @@ The structure here is similar. We have a `preorderTraverse`, which creates and r
 
 The purpose of `queue` is to store the next few nodes we want to visit. Here's our approach:
 
-1. As long as `queue` contains items, we call `traverse` over and over, passing the queue. At the start, it only contains the root node. 
+1. As long as `queue` contains items, we call `traverse` over and over, passing the queue. At the start, it only contains the root node.
 2. `traverse` takes the _last_ item out of the queue (I'll explain why in a second) and pushes it into `output`, marking it as visited. If that node has a right child, we push it into the queue. If it has a left child, we push it in as well.
 3. The first execution of `traverse` ends, but since the queue now has _two_ items (the left and right child of the right node), it gets called again by the `while` loop.
 4. This time, the last item in the queue is Node1's left child (since it was pushed second). We look for its children, and push them into the queue.
-5. The process repeats until we've visited every item in the tree. 
+5. The process repeats until we've visited every item in the tree.
 
 Let's look at what happens with the below tree:
 
@@ -268,7 +268,7 @@ Here's the function calls, showing what's happening in the queue:
 3. `traverse([Node3, Node2])` is called from `preorderTraverse`.
 4. `traverse([Node3])` is called from `preorderTraverse`.
 
-A note on queue ordering: we actually want to visit the left child _first_, before the right, so we push it second and then use `pop` to take the last item from the queue each time. You could accomplish the same thing by pushing the left child in the queue first, then using `shift` instead of `pop` to take the first item in the array. But it's less efficient to use `shift`, since that requires moving every item in memory over one index. 
+A note on queue ordering: we actually want to visit the left child _first_, before the right, so we push it second and then use `pop` to take the last item from the queue each time. You could accomplish the same thing by pushing the left child in the queue first, then using `shift` instead of `pop` to take the first item in the array. But it's less efficient to use `shift`, since that requires moving every item in memory over one index.
 
 Let's do one more example.
 
@@ -308,7 +308,7 @@ With inorder traversal, we visit the left child of the current node before we vi
 
 **Inorder: Left child, node, right child**
 
-Here's a simple example: 
+Here's a simple example:
 
 <BinaryTree tree={[1, null, 2, 3]} traversalMethod="inorder" />
 
@@ -382,7 +382,7 @@ function inorderTraverse(root) {
 }
 ```
 
-How great is that? All we do is move `output.push(node.val);` down a couple of lines, to put the visitation of the left node first. 
+How great is that? All we do is move `output.push(node.val);` down a couple of lines, to put the visitation of the left node first.
 
 Let's do one example:
 
@@ -410,6 +410,91 @@ Here are the function calls:
 15. `traverse(Node7)` pushes Node 7 to output.
 
 The confusing part is that we fully explore a node's left subtree before pushing it to output. So we move up and down the call stack in a weird zigzagging way.
+
+#### Solving binary inorder traversal with iteration
+
+The iterative approach to inorder traversal is more complicated than the iterative approach to preorder. Instead of just relying on a `queue` to store the nodes we want to visit next, we also need to introduce a `currentNode` variable that helps us keep track of the current node.
+
+```js
+function traverse(currentNode, queue, output) {
+  if (currentNode) {
+    queue.push(currentNode);
+    currentNode = currentNode.left;
+  } else {
+    const toVisit = queue.pop();
+    output.push(toVisit.val);
+    currentNode = toVisit.right;
+  }
+}
+
+function inOrderTraverse(node) {
+  const queue = [node];
+  const output = [];
+  let currentNode = node.left;
+
+  while (currentNode || queue.length) {
+    traverse(currentNode, queue, output);
+  }
+
+  return output;
+}
+```
+
+Let's start with an example.
+
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="preorder" />
+
+For this tree, the function calls will be:
+
+1. `inorderTraverse` calls `traverse` with root node in queue and the `currentNode` as the Node 1's left child (Node 2).
+2. Since there is a `currentNode`, `traverse` pushes Node 2 into the queue, and sets the `currentNode` to its left child... which is null. So `currentNode` is now null.
+3. Since the queue length is now 2, the `while` loop in `inorderTraverse` calls `traverse` again.
+4. Since there is NO `currentNode`, `traverse` removes Node 2 from the queue and pushes it into output. It then sets the `currentNode` to Node 2's right child... which is null. `currentNode` is null again.
+4. Since the queue length is now 1, the `while` loop in `inorderTraverse` calls `traverse` again.
+5. Since there is NO `currentNode`, `traverse` removes Node 1 from the queue and pushes it into output. It sets the `currentNode` to Node 1's right child, which is Node 3.
+6. The queue length is now 0, but there is a `currentNode`, so the `while` loop in `inorderTraverse` calls `traverse` again.
+7. Since there is a `currentNode`, `traverse` pushes Node 3 into the queue, and sets the `currentNode` to its left child... which is null. So `currentNode` is now null.
+8. The queue length is now 1, so `inorderTraverse` calls `traverse` again.
+9. Since there is NO `currentNode`, `traverse` removes Node 3 from the queue and pushes it into output. It sets the `currentNode` to Node 3's right child, which is null.
+7. The queue length is now 0. `currentNode` is null. `inorderTraverse` returns `output`.
+
+Here's the function calls, showing what's happening in `currentNode` (first argumemt) and the queue (second argument):
+
+1. `inorderTraverse` is called with the root node (Node 1).
+2. `traverse(Node2, [Node1])` is called from `inorderTraverse`.
+3. `traverse(null, [Node1, Node2])` is called from `inorderTraverse`.
+4. `traverse(null, [Node1])` is called from `inorderTraverse`.
+5. `traverse(Node3, [])` is called from `inorderTraverse`.
+6. `traverse(null, [Node3])` is called from `inorderTraverse`.
+
+Let's do one more example.
+
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="inorder"
+/>
+
+Here are the function calls:
+
+1. `inorderTraverse(Node1)`.
+2. `traverse(Node2, [Node1])` is called from the `while` loop (all following calls are from the loop).
+3. `traverse(Node4, [Node1, Node2])` is called.
+4. `traverse(null, [Node1, Node2, Node 4])` is called.
+5. `traverse(null, [Node1, Node2])` is called.
+6. `traverse(Node5, [Node1])` is called.
+7. `traverse(null, [Node1, Node5])` is called.
+8. `traverse(null, [Node1])` is called.
+9. `traverse(Node3, [])` is called.
+10. `traverse(Node6, [Node3])` is called.
+11. `traverse(null, [Node3, Node6])` is called.
+12. `traverse(null, [Node3])` is called.
+13. `traverse(Node7, [])` is called.
+
+You can see in the above that `Node` is in the queue from the very start, but it isn't removed & marked as visited until its entire left subtree is visited (which happens at step 8). That's inorder traversal in action.
+
+As a side note, You may see solutions online that remove the need for the `current` variable by modifying the tree as we traverse it. That's a valid approach, but begs the question: what would you do if the tree was immutable?
+
+Let's move on to the last form of traversal: postorder.
 
 ## Postorder traversal
 
