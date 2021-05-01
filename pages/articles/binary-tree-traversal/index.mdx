@@ -478,17 +478,17 @@ Here are the function calls:
 
 1. `inorderTraverse(Node1)`.
 2. `traverse(Node2, [Node1])` is called from the `while` loop (all following calls are from the loop).
-3. `traverse(Node4, [Node1, Node2])` is called.
-4. `traverse(null, [Node1, Node2, Node 4])` is called.
-5. `traverse(null, [Node1, Node2])` is called.
-6. `traverse(Node5, [Node1])` is called.
-7. `traverse(null, [Node1, Node5])` is called.
-8. `traverse(null, [Node1])` is called.
-9. `traverse(Node3, [])` is called.
-10. `traverse(Node6, [Node3])` is called.
-11. `traverse(null, [Node3, Node6])` is called.
-12. `traverse(null, [Node3])` is called.
-13. `traverse(Node7, [])` is called.
+3. `traverse(Node4, [Node1, Node2])`
+4. `traverse(null, [Node1, Node2, Node 4])`
+5. `traverse(null, [Node1, Node2])`
+6. `traverse(Node5, [Node1])`
+7. `traverse(null, [Node1, Node5])`
+8. `traverse(null, [Node1])`
+9. `traverse(Node3, [])`
+10. `traverse(Node6, [Node3])`
+11. `traverse(null, [Node3, Node6])`
+12. `traverse(null, [Node3])`
+13. `traverse(Node7, [])`
 
 You can see in the above that `Node` is in the queue from the very start, but it isn't removed & marked as visited until its entire left subtree is visited (which happens at step 8). That's inorder traversal in action.
 
@@ -496,7 +496,7 @@ As a side note, You may see solutions online that remove the need for the `curre
 
 Let's move on to the last form of traversal: postorder.
 
-## Postorder traversal
+### Postorder traversal of a binary tree
 
 Postorder is the reverse of preorder: in postorder, we visit all children before the parent.
 
@@ -515,6 +515,85 @@ And one more:
   tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]}
   traversalMethod="postorder"
 />
+
+#### Solving binary postorder traversal with recursion
+
+Can you guess how we modify the below preorder traversal to be postorder?
+
+```js
+function traverse(node, output) {
+  output.push(node.val);
+
+  if (node.left) {
+    traverse(node.left, output);
+  }
+
+  if (node.right) {
+    traverse(node.right, output);
+  }
+}
+
+function preorderTraverse(root) {
+  const output: number[] = [];
+
+  traverse(root, output);
+
+  return output;
+}
+```
+
+Here's the answer:
+
+```js
+function traverse(node, output) {
+  if (node.left) {
+    traverse(node.left, output);
+  }
+
+  if (node.right) {
+    traverse(node.right, output);
+  }
+
+  output.push(node.val);
+}
+
+function postorderTraverse(root) {
+  const output: number[] = [];
+
+  traverse(root, output);
+
+  return output;
+}
+```
+
+Simple! We move the `output.push` until _after_ we've traversed both children (and their subtrees).
+
+Let's do one example:
+
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="postorder"
+/>
+
+Here are the function calls:
+
+1. `postorderTraverse(Node1)`.
+2. `traverse(Node1)` is called from `postorderTraverse(Node1)`.
+3. `traverse(Node2)` is called from `traverse(Node1)`.
+4. `traverse(Node4)` is called from `traverse(Node2)`
+5. `traverse(Node4)` pushes Node 4 to output.
+6. `traverse(Node5)` is called from `traverse(Node2)`
+7. `traverse(Node5)` pushes Node 5 to output.
+8. `traverse(Node2)` pushes Node 2 to output
+9. `traverse(Node1)` calls `traverse(Node3)`.
+10. `traverse(Node3)` calls `traverse(Node6)`.
+11. `traverse(Node6)` pushes Node 6 to output.
+12. `traverse(Node3)` calls `traverse(Node7)`.
+13. `traverse(Node7)` pushes Node 7 to output.
+14. `traverse(Node3)` pushes Node 3 to output.
+15. `traverse(Node1)` pushes Node 1 to output.
+
+With postorder traversal, the root node is the last one we visit.
 
 # N-ary tree
 
