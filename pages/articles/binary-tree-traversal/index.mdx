@@ -300,9 +300,15 @@ Which yields us the same order of nodes visited as recursion:
 
 Take your time to really understand both recursion and iteration in the above examples. The other forms of traversal are slightly different, but follow the same principles, so we'll start moving a bit faster.
 
-## Inorder traversal
+### Inorder traversal of a binary tree
 
-In preorder traversal, we visit the node, then its children from left to right. With inorder traversal, we instead start with the left children first. Let's see this first with a binary tree, where it's simpler:
+With inorder traversal, we visit the left child of the current node before we visit the node itself. Here are the differences between the two approaches:
+
+**Preorder: Node, left child, right child**
+
+**Inorder: Left child, node, right child**
+
+Here's a simple example: 
 
 <BinaryTree tree={[1, null, 2, 3]} traversalMethod="inorder" />
 
@@ -319,6 +325,91 @@ And one more:
   tree={[1, null, 2, 3, null, 4, 5, null, 6, 7, null, 8, null, null, 9, 10]}
   traversalMethod="inorder"
 />
+
+### Implementing binary inorder traversal
+
+Again, we can take both a recursion and an interation approach. Again, iteration is more efficient, but recursion is simpler to impelement.
+
+#### Solving binary inorder traversal with recursion
+
+With recursion, changing from preorder to inorder is trivial. Let's see the two code samples side by side.
+
+Here's preorder, as a refresher:
+
+```js
+function traverse(node, output) {
+  output.push(node.val);
+
+  if (node.left) {
+    traverse(node.left, output);
+  }
+
+  if (node.right) {
+    traverse(node.right, output);
+  }
+}
+
+function preorderTraverse(root) {
+  const output: number[] = [];
+
+  traverse(root, output);
+
+  return output;
+}
+```
+
+And here's the new inorder implementation:
+
+```js
+function traverse(node, output) {
+  if (node.left) {
+    traverse(node.left, output);
+  }
+
+  output.push(node.val);
+
+  if (node.right) {
+    traverse(node.right, output);
+  }
+}
+
+function inorderTraverse(root) {
+  const output: number[] = [];
+
+  traverse(root, output);
+
+  return output;
+}
+```
+
+How great is that? All we do is move `output.push(node.val);` down a couple of lines, to put the visitation of the left node first. 
+
+Let's do one example:
+
+<BinaryTree
+  tree={[1, null, 2, 3, null, 4, 5, null, 6, 7]}
+  traversalMethod="inorder"
+/>
+
+Here are the function calls:
+
+1. `inorderTraverse(Node1)`.
+2. `traverse(Node1)` is called from `inorderTraverse(Node1)`.
+3. `traverse(Node2)` is called from `traverse(Node1)`.
+4. `traverse(Node4)` is called from `traverse(Node2)`
+5. `traverse(Node4)` pushes Node 4 to output.
+6. `traverse(Node2)` pushes Node 2 to output
+7. `traverse(Node5)` is called from `traverse(Node2)`
+8. `traverse(Node5)` pushes Node 5 to output.
+9. `traverse(Node1)` pushes Node 1 to output.
+10. `traverse(Node1)` calls `traverse(Node3)`.
+11. `traverse(Node3)` calls `traverse(Node6)`.
+12. `traverse(Node6)` pushes Node 6 to output.
+13. `traverse(Node3)` pushes Node 3 to output.
+14. `traverse(Node3)` calls `traverse(Node7)`.
+15. `traverse(Node7)` pushes Node 7 to output.
+
+The confusing part is that we fully explore a node's left subtree before pushing it to output. So we move up and down the call stack in a weird zigzagging way.
 
 ## Postorder traversal
 
