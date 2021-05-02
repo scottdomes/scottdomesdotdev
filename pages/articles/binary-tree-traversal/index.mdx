@@ -450,13 +450,13 @@ For this tree, the function calls will be:
 2. Since there is a `currentNode`, `traverse` pushes Node 2 into the queue, and sets the `currentNode` to its left child... which is null. So `currentNode` is now null.
 3. Since the queue length is now 2, the `while` loop in `inorderTraverse` calls `traverse` again.
 4. Since there is NO `currentNode`, `traverse` removes Node 2 from the queue and pushes it into output. It then sets the `currentNode` to Node 2's right child... which is null. `currentNode` is null again.
-4. Since the queue length is now 1, the `while` loop in `inorderTraverse` calls `traverse` again.
-5. Since there is NO `currentNode`, `traverse` removes Node 1 from the queue and pushes it into output. It sets the `currentNode` to Node 1's right child, which is Node 3.
-6. The queue length is now 0, but there is a `currentNode`, so the `while` loop in `inorderTraverse` calls `traverse` again.
-7. Since there is a `currentNode`, `traverse` pushes Node 3 into the queue, and sets the `currentNode` to its left child... which is null. So `currentNode` is now null.
-8. The queue length is now 1, so `inorderTraverse` calls `traverse` again.
-9. Since there is NO `currentNode`, `traverse` removes Node 3 from the queue and pushes it into output. It sets the `currentNode` to Node 3's right child, which is null.
-7. The queue length is now 0. `currentNode` is null. `inorderTraverse` returns `output`.
+5. Since the queue length is now 1, the `while` loop in `inorderTraverse` calls `traverse` again.
+6. Since there is NO `currentNode`, `traverse` removes Node 1 from the queue and pushes it into output. It sets the `currentNode` to Node 1's right child, which is Node 3.
+7. The queue length is now 0, but there is a `currentNode`, so the `while` loop in `inorderTraverse` calls `traverse` again.
+8. Since there is a `currentNode`, `traverse` pushes Node 3 into the queue, and sets the `currentNode` to its left child... which is null. So `currentNode` is now null.
+9. The queue length is now 1, so `inorderTraverse` calls `traverse` again.
+10. Since there is NO `currentNode`, `traverse` removes Node 3 from the queue and pushes it into output. It sets the `currentNode` to Node 3's right child, which is null.
+11. The queue length is now 0. `currentNode` is null. `inorderTraverse` returns `output`.
 
 Here's the function calls, showing what's happening in `currentNode` (first argumemt) and the queue (second argument):
 
@@ -492,7 +492,7 @@ Here are the function calls:
 
 You can see in the above that `Node` is in the queue from the very start, but it isn't removed & marked as visited until its entire left subtree is visited (which happens at step 8). That's inorder traversal in action.
 
-As a side note, You may see solutions online that remove the need for the `current` variable by modifying the tree as we traverse it. That's a valid approach, but begs the question: what would you do if the tree was immutable?
+As a side note, you may see solutions online that remove the need for the `current` variable by modifying the tree as we traverse it. That's a valid approach, but begs the question: what would you do if the tree was immutable?
 
 Let's move on to the last form of traversal: postorder.
 
@@ -596,6 +596,73 @@ Here are the function calls:
 With postorder traversal, the root node is the last one we visit.
 
 #### Solving binary postorder traversal with iteration
+
+Iterative is, in some ways, the "reverse" of a preorder traversal. Instead of going node -> children, we go children -> node. However, it's not a true reversal, as we still want to go from left to right. Instead of node -> left -> right, we go left -> right -> node.
+
+The easiest way to implement postorder is to change the way we add nodes to the `output` array. Instead of `push`ing them to the back of the array, we `unshift` them to the front. Note that `unshift` is less efficient than `push`, since all items in the array have to be shifted in memory. If you use this solution in an interview, be sure to note that fact.
+
+The alternate way to implement a postorder traversal, avoiding `unshift`, is to use some mechanism to keep track of previous nodes visited. The trouble with postorder is going from parent to left sibling to right sibling to parent; when we return to the parent, how do we know we've already visited the left node?
+
+These solutions are more complex so I decided to not to include them here. The `unshift` method is still very efficient and simple to implement. You can see an alternate [two-queue solution here](https://www.geeksforgeeks.org/iterative-postorder-traversal/).
+
+Anyway, let's get to the code!
+
+```js
+function traverse(queue, output) {
+  const current = queue.pop();
+
+  output.unshift(current.val);
+
+  if (current.left) {
+    queue.push(current.left);
+  }
+  if (current.right) {
+    queue.push(current.right);
+  }
+}
+
+function postorderTraverse(node) {
+  const queue = [node];
+  const output = [];
+
+  while (queue.length) {
+    traverse(queue, output);
+  }
+
+  return output;
+}
+```
+
+This implementation is exactly the same as a preorder traversal, except we swap `push` for `unshift` and swap the order with which we deal with the children.
+
+Here's an example:
+
+<BinaryTree tree={[1, null, 2, 3]} traversalMethod="postorder" />
+
+For this tree, the function calls will be:
+
+1. `postorderTraverse` calls `traverse` with root node in queue.
+2. `traverse` takes Node 1 out of the queue and unshifts it into `output`, then pushes its left child (Node 2) and its right child (Node 3) into the queue.
+3. Since the queue length is now 2, the `while` loop in `postorderTraverse` calls `traverse` again.
+4. `traverse` takes Node 3 out of the queue and unshifts it into `output`. Since it has no children, nothing else happens.
+5. Since the queue length is 1, the `while` loop in `postorderTraverse` calls `traverse` again.
+6. `traverse` takes Node 2 out of the queue and unshifts it into `output`. Since it has no children, nothing else happens.
+7. The queue length is now 0. `postorderTraverse` returns `output`.
+
+Here's the function calls, showing what's happening in the queue:
+
+1. `postorderTraverse` is called with the root node (Node 1).
+2. `traverse([Node1])` is called from `postorderTraverse`.
+3. `traverse([Node2, Node3])` is called from `postorderTraverse`.
+4. `traverse([Node2])` is called from `postorderTraverse`.
+
+In this case, it might help to see the output and queue side by side:
+
+1. Queue: `[Node 1]`, Output: `[]`
+2. Queue: `[Node2, Node3]`, Output: `[Node1]`
+3. Queue: `[Node2]`, Output: `[Node3, Node1]`
+4. Queue: `[]`, Output: `[Node2, Node3, Node1]`
+
 
 # N-ary tree
 
